@@ -46,37 +46,7 @@ export default function Home() {
       {/* Hero Section with Drone Light Show Background */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Animated Drone Light Show Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black">
-          {/* Animated stars/drone lights */}
-          <div className="absolute inset-0">
-            {Array.from({ length: 100 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-1 h-1 bg-white rounded-full twinkle"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                }}
-              />
-            ))}
-          </div>
-          
-          {/* Moving drone formations */}
-          <div className="absolute inset-0">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div
-                key={`formation-${i}`}
-                className="absolute w-2 h-2 bg-white rounded-full drone-light"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 5}s`,
-                }}
-              />
-            ))}
-          </div>
-        </div>
+        <DroneLightShow />
 
         {/* Hero Content */}
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,7 +76,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               About <span className="font-black">REXIN</span><span className="font-thin">DYNAMICS</span>
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
               We are a cutting-edge drone and aerial robotics startup specializing in entertainment 
               and defense applications. Our innovative technology brings spectacular drone light shows 
               to life while developing confidential defense solutions for the future.
@@ -120,7 +90,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
               From spectacular entertainment to cutting-edge defense solutions
             </p>
           </div>
@@ -131,7 +101,7 @@ export default function Home() {
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-2xl">🎆</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Drone Light Shows</h3>
+                <h3 className="text-2xl font-bold mb-4 text-white">Drone Light Shows</h3>
                 <p className="text-gray-300 mb-6">
                   Spectacular aerial displays that combine precision flight with stunning visual effects. 
                   Perfect for events, celebrations, and entertainment venues.
@@ -147,7 +117,7 @@ export default function Home() {
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-2xl">🛡️</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Defense Solutions</h3>
+                <h3 className="text-2xl font-bold mb-4 text-white">Defense Solutions</h3>
                 <p className="text-gray-300 mb-6">
                   Advanced aerial robotics technology for defense applications. 
                   Confidential projects coming soon with cutting-edge capabilities.
@@ -166,7 +136,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Team</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
               Meet the visionaries behind Rexin Dynamics
             </p>
           </div>
@@ -184,9 +154,9 @@ export default function Home() {
                     {member.name.split(' ').map(n => n[0]).join('')}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{member.name}</h3>
-                <p className="text-gray-400 mb-2">{member.role}</p>
-                <p className="text-sm text-gray-500">{member.description}</p>
+                <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>
+                <p className="text-gray-300 mb-2">{member.role}</p>
+                <p className="text-sm text-gray-400">{member.description}</p>
               </Card>
             ))}
           </div>
@@ -198,7 +168,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
               Ready to explore the future of aerial robotics with us?
             </p>
           </div>
@@ -206,7 +176,7 @@ export default function Home() {
           <div className="max-w-2xl mx-auto">
             <Card className="bg-gray-900 border-gray-700 p-8">
               <div className="text-center">
-                <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+                <h3 className="text-2xl font-bold mb-6 text-white">Contact Information</h3>
                 <div className="space-y-4">
                   <p className="text-gray-300">Email: info@rexindynamics.com</p>
                   <p className="text-gray-300">Phone: +1 (555) 123-4567</p>
