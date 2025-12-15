@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,11 +15,22 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Rexin Dynamics - Pioneering the Future of Aerial Robotics",
-  description: "Rexin Dynamics is a cutting-edge drone and aerial robotics startup specializing in entertainment and defense applications. We bring spectacular drone light shows to life while developing confidential defense solutions for the future.",
-  keywords: ["drone light shows", "aerial robotics", "defense solutions", "drone technology", "entertainment", "Kerala", "India", "Rexin Dynamics"],
-  authors: [{ name: "Rexin Dynamics" }],
-  creator: "Rexin Dynamics",
-  publisher: "Rexin Dynamics",
+  description:
+    "Rexin Dynamics Private Limited is a cutting-edge drone and aerial robotics startup specializing in entertainment and defense applications. We bring spectacular drone light shows to life while developing confidential defense solutions for the future.",
+  keywords: [
+    "drone light shows",
+    "aerial robotics",
+    "defense solutions",
+    "drone technology",
+    "entertainment",
+    "Kerala",
+    "India",
+    "Rexin Dynamics",
+    "Rexin Dynamics Private Limited",
+  ],
+  authors: [{ name: "Rexin Dynamics Private Limited" }],
+  creator: "Rexin Dynamics Private Limited",
+  publisher: "Rexin Dynamics Private Limited",
   robots: {
     index: true,
     follow: true,
@@ -69,11 +81,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

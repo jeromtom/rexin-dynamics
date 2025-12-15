@@ -49,13 +49,13 @@ export default function DroneLightShow() {
   }, []);
 
   return (
-    <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black">
+    <div className="absolute inset-0 bg-background">
       {/* Animated stars/drone lights */}
       <div className="absolute inset-0">
         {droneLights.map((light) => (
           <div
             key={light.id}
-            className="absolute w-1 h-1 bg-white rounded-full twinkle"
+            className="absolute w-1 h-1 bg-foreground/40 rounded-full twinkle"
             style={{
               left: `${light.left}%`,
               top: `${light.top}%`,
@@ -71,7 +71,7 @@ export default function DroneLightShow() {
         {droneFormations.map((formation) => (
           <div
             key={`formation-${formation.id}`}
-            className="absolute w-2 h-2 bg-white rounded-full drone-light"
+            className="absolute w-2 h-2 bg-foreground/60 rounded-full drone-light"
             style={{
               left: `${formation.left}%`,
               top: `${formation.top}%`,
