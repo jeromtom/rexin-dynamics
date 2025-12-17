@@ -82,6 +82,59 @@ export default function ShippingPage() {
           </Link>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-background py-8 text-center text-xs text-muted-foreground">
+        <div className="mx-auto max-w-4xl space-y-3 px-4">
+          <div>
+            <p className="text-[0.7rem] uppercase tracking-[0.25em]">
+              Rexin Dynamics Private Limited
+            </p>
+            <p className="mt-1">
+              Pioneering the future of aerial robotics · Kerala, India
+            </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              href="/terms"
+              className="underline-offset-4 hover:underline"
+            >
+              Terms &amp; Conditions
+            </Link>
+            <span>·</span>
+            <Link
+              href="/privacy"
+              className="underline-offset-4 hover:underline"
+            >
+              Privacy Policy
+            </Link>
+            <span>·</span>
+            <Link
+              href="/refund-cancellation"
+              className="underline-offset-4 hover:underline"
+            >
+              Refund &amp; Cancellation
+            </Link>
+            <span>·</span>
+            <Link
+              href="/return"
+              className="underline-offset-4 hover:underline"
+            >
+              Return Policy
+            </Link>
+            <span>·</span>
+            <Link
+              href="/shipping"
+              className="underline-offset-4 hover:underline"
+            >
+              Shipping Policy
+            </Link>
+          </div>
+
+          <p>© {new Date().getFullYear()} Rexin Dynamics Private Limited. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }

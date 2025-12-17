@@ -139,6 +139,9 @@ export default function Home() {
             <Button
               size="lg"
               className="rounded-full px-6 text-[0.7rem] uppercase tracking-[0.2em]"
+              onClick={() => {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               Get in touch
             </Button>
@@ -146,6 +149,9 @@ export default function Home() {
               size="lg"
               variant="outline"
               className="rounded-full px-6 text-[0.7rem] uppercase tracking-[0.2em]"
+              onClick={() => {
+                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               View services
             </Button>
