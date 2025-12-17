@@ -218,6 +218,9 @@ export default function Home() {
               We stay intentionally small and focused, working closely with teams on
               drones, flight systems, and learning programs that actually ship.
             </p>
+            <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:text-base mt-4">
+              Pricing starts from ₹5,000 and goes up to ₹50,000.
+            </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">

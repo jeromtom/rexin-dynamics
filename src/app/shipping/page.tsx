@@ -42,14 +42,18 @@ export default function ShippingPage() {
           </p>
 
           <section>
+            <h2 className="text-base font-medium mb-2 text-foreground">Shipping Policy</h2>
             <p>
-              The orders for the user are shipped through registered domestic courier companies and/or speed post only. Orders are shipped within 10 days from the date of the order and/or payment or as per the delivery date agreed at the time of order confirmation and delivering of the shipment, subject to courier company / post office norms. Platform Owner shall not be liable for any delay in delivery by the courier company / postal authority. Delivery of all orders will be made to the address provided by the buyer at the time of purchase. Delivery of our services will be confirmed on your email ID as specified at the time of registration. If there are any shipping cost(s) levied by the seller or the Platform Owner (as the case be), the same is not refundable.
+              We mainly provide services. If anything is to be shipped, it will be via third party vendors.
             </p>
           </section>
 
           <section>
             <h2 className="text-base font-medium mb-2 text-foreground">Contact Information</h2>
             <div className="mt-2 space-y-1 text-sm">
+              <p>
+                <strong>Business Name:</strong> Rexin Dynamics Private Limited
+              </p>
               <p>
                 <strong>Email:</strong>{" "}
                 <a
@@ -60,7 +64,7 @@ export default function ShippingPage() {
                 </a>
               </p>
               <p>
-                <strong>Phone:</strong> +91 89215 88769
+                <strong>Mobile:</strong> +91 89215 88769
               </p>
               <p>
                 <strong>Address:</strong> KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662, India

@@ -109,6 +109,9 @@ export default function PrivacyPage() {
             </p>
             <div className="mt-2 space-y-1 text-sm">
               <p>
+                <strong>Business Name:</strong> Rexin Dynamics Private Limited
+              </p>
+              <p>
                 <strong>Email:</strong>{" "}
               <a
                 href="mailto:contact@rexindynamics.com"
@@ -118,7 +121,7 @@ export default function PrivacyPage() {
               </a>
               </p>
               <p>
-                <strong>Phone:</strong> +91 89215 88769
+                <strong>Mobile:</strong> +91 89215 88769
               </p>
               <p>
                 <strong>Time:</strong> Monday - Friday (9:00 - 18:00)

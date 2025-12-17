@@ -157,6 +157,9 @@ export default function TermsPage() {
             <h2 className="text-base font-medium mb-2 text-foreground">Contact Information</h2>
             <div className="mt-2 space-y-1 text-sm">
               <p>
+                <strong>Business Name:</strong> Rexin Dynamics Private Limited
+              </p>
+              <p>
                 <strong>Email:</strong>{" "}
                 <a
                   href="mailto:contact@rexindynamics.com"
@@ -166,7 +169,7 @@ export default function TermsPage() {
                 </a>
               </p>
               <p>
-                <strong>Phone:</strong> +91 89215 88769
+                <strong>Mobile:</strong> +91 89215 88769
               </p>
               <p>
                 <strong>Address:</strong> KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662, India
