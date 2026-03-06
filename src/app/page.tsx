@@ -475,6 +475,66 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Acknowledgements */}
+      <section className="scroll-reveal border-t border-border bg-muted/40 py-14">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 space-y-3 text-center">
+            <p className="text-[0.7rem] uppercase tracking-[0.3em] text-muted-foreground">
+              Acknowledgements
+            </p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl">
+              Supported by
+            </h2>
+            <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:text-base">
+              IPTIF, IIT Palakkad under{" "}
+              <a
+                href="https://iptif.tech/entrepreneurship-development/entrepreneur-residence-eir"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-4 hover:text-foreground transition-colors"
+              >
+                DISHA-EIR Program
+              </a>
+              .
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-start justify-center gap-10">
+            {/* IPTIF */}
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex h-32 w-48 items-center justify-center rounded-xl bg-white p-5 shadow-sm ring-1 ring-border/30">
+                <Image
+                  src="/IPTIF Logo.png"
+                  alt="IPTIF, IIT Palakkad"
+                  width={401}
+                  height={293}
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <p className="text-[0.7rem] uppercase tracking-[0.2em] text-muted-foreground">
+                IPTIF, IIT Palakkad
+              </p>
+            </div>
+
+            {/* Buimerc India Foundation */}
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex h-32 w-48 items-center justify-center rounded-xl bg-white p-5 shadow-sm ring-1 ring-border/30">
+                <Image
+                  src="/Buimerc.png"
+                  alt="Buimerc India Foundation"
+                  width={2196}
+                  height={2683}
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <p className="text-[0.7rem] uppercase tracking-[0.2em] text-muted-foreground">
+                Buimerc India Foundation
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-border bg-background py-8 text-center text-xs text-muted-foreground">
         <div className="mx-auto max-w-4xl space-y-3 px-4">
