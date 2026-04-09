@@ -158,11 +158,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Subtle scroll hint */}
-        <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 transform text-center text-[0.65rem] text-muted-foreground">
-          <div className="mb-2 tracking-[0.3em] uppercase">Scroll</div>
-          <div className="mx-auto h-8 w-px bg-muted-foreground/40" />
-        </div>
       </section>
 
       {/* About */}
@@ -291,31 +286,15 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2">
             {[
               {
-                name: "Siona Shaji",
-                role: "MD",
-                description: "Operations and delivery.",
-                image: "/team-siona.png",
-                linkedin: "https://linkedin.com/in/siona-shaji-zacharias",
-                email: "siona@rexindynamics.com",
-              },
-              {
                 name: "Junaid CK",
-                role: "CTO-Software",
+                role: "CTO",
                 description: "Developing software systems.",
                 image: "/team-junaid.png",
                 linkedin: "https://linkedin.com/in/junaid-c-k",
                 email: "junaid@rexindynamics.com",
-              },
-              {
-                name: "Arjun Raju",
-                role: "CTO-Hardware",
-                description: "Developing hardware systems.",
-                image: "/team-arjun.png",
-                linkedin: "https://linkedin.com/in/arjun-raju-498b7532a",
-                email: "arjun@rexindynamics.com",
               },
               {
                 name: "Jerom Tom",
@@ -357,11 +336,7 @@ export default function Home() {
                       className="rounded-md border border-border/70 bg-muted/60 p-1.5 hover:bg-muted transition-colors"
                       aria-label={`${member.name} LinkedIn`}
                     >
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                       </svg>
                     </a>
@@ -370,18 +345,8 @@ export default function Home() {
                       className="rounded-md border border-border/70 bg-muted/60 p-1.5 hover:bg-muted transition-colors"
                       aria-label={`${member.name} Email`}
                     >
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
+                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </a>
                   </div>
