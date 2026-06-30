@@ -130,9 +130,7 @@ export function GlobeNetwork() {
               const n = d?.properties && (d.properties.ADMIN || d.properties.NAME || d.properties.name);
               return n === "India" ? "rgba(0,0,0,0)" : "rgba(232,72,8,0.9)";
             });
-          fetch(
-            "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson",
-          )
+          fetch("/geo/ne_110m_admin_0_countries.geojson")
             .then((r) => r.json())
             .then((geo) => {
               if (cancelled || !world || !geo?.features) return;

@@ -18,6 +18,7 @@ export function RXButton({
   onClick,
   fullWidth,
   type,
+  disabled,
   style,
 }: {
   children: ReactNode;
@@ -27,6 +28,7 @@ export function RXButton({
   onClick?: MouseEventHandler<HTMLElement>;
   fullWidth?: boolean;
   type?: "button" | "submit";
+  disabled?: boolean;
   style?: CSSProperties;
 }) {
   const className = [
@@ -46,7 +48,13 @@ export function RXButton({
     );
   }
   return (
-    <button type={type ?? "button"} className={className} style={style} onClick={onClick}>
+    <button
+      type={type ?? "button"}
+      className={className}
+      style={disabled ? { ...style, opacity: 0.6, cursor: "not-allowed" } : style}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );
