@@ -254,7 +254,7 @@
 }
 
 /* ============================================================
-   REXIN DYNAMICS — Design System (Operator HUD)
+   REXIN DYNAMICS: Design System (Operator HUD)
    Getting closer to Physical AI.
    Day is the default (:root / [data-theme="light"]).
    Night re-maps the semantic --rx-* roles via [data-theme="dark"]
@@ -322,7 +322,7 @@
   --rx-header-border: #1f1f22;
 }
 
-/* Operator-HUD ambient motion — gated behind reduced-motion */
+/* Operator-HUD ambient motion, gated behind reduced-motion */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes rxRise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
   @keyframes rxTwinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }

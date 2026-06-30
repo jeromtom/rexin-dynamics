@@ -1,4 +1,4 @@
-/* Rexin Dynamics — shared icon set (ported from the design system).
+/* Rexin Dynamics: shared icon set (ported from the design system).
    Lucide-style geometric line icons (2px stroke, round caps) to match
    the engineering-precise voice. See design-system › Iconography. */
 import type { CSSProperties, ReactNode } from "react";

@@ -18,7 +18,6 @@ export function RXButton({
   onClick,
   fullWidth,
   type,
-  disabled,
   style,
 }: {
   children: ReactNode;
@@ -28,7 +27,6 @@ export function RXButton({
   onClick?: MouseEventHandler<HTMLElement>;
   fullWidth?: boolean;
   type?: "button" | "submit";
-  disabled?: boolean;
   style?: CSSProperties;
 }) {
   const className = [
@@ -48,13 +46,7 @@ export function RXButton({
     );
   }
   return (
-    <button
-      type={type ?? "button"}
-      className={className}
-      style={disabled ? { ...style, opacity: 0.6, cursor: "not-allowed" } : style}
-      onClick={onClick}
-      disabled={disabled}
-    >
+    <button type={type ?? "button"} className={className} style={style} onClick={onClick}>
       {children}
     </button>
   );
@@ -156,24 +148,30 @@ export function Stat({
       return;
     }
     let started = false;
+    let rafId = 0;
+    let cancelled = false;
     const run = () => {
       if (started) return;
       started = true;
       const dur = 1200;
       const t0 = performance.now();
       const step = (now: number) => {
+        if (cancelled) return;
         const t = Math.min(1, (now - t0) / dur);
         const e = 1 - Math.pow(1 - t, 3);
         setDisplay((target * e).toFixed(decimals));
-        if (t < 1) requestAnimationFrame(step);
+        if (t < 1) rafId = requestAnimationFrame(step);
         else setDisplay(target.toFixed(decimals));
       };
-      requestAnimationFrame(step);
+      rafId = requestAnimationFrame(step);
     };
 
     if (!("IntersectionObserver" in window)) {
       run();
-      return;
+      return () => {
+        cancelled = true;
+        if (rafId) cancelAnimationFrame(rafId);
+      };
     }
     const io = new IntersectionObserver(
       (entries) => {
@@ -187,7 +185,11 @@ export function Stat({
       { threshold: 0.35 },
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      cancelled = true;
+      if (rafId) cancelAnimationFrame(rafId);
+      io.disconnect();
+    };
   }, [numeric, target, decimals, value]);
 
   return (

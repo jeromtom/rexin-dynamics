@@ -61,16 +61,12 @@ const topics = [
 
 const sectionPad = "90px 28px";
 
-// Set NEXT_PUBLIC_WEB3FORMS_KEY to deliver submissions to your inbox via
-// Web3Forms (https://web3forms.com). Without it, the form falls back to mailto.
-const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
-
 export default function Home() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [tab, setTab] = useState<"ai" | "air">("ai");
   const [currency, setCurrency] = useState("USD");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [sent, setSent] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const bloomRef = useRef<HTMLDivElement>(null);
 
@@ -105,45 +101,17 @@ export default function Home() {
 
   const cur = CURRENCIES.find((c) => c.code === currency) ?? CURRENCIES[0];
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const data = new FormData(form);
-    if (data.get("botcheck")) return; // honeypot: ignore bots
+    const data = new FormData(e.currentTarget);
     const name = String(data.get("name") || "");
     const email = String(data.get("email") || "");
     const topic = String(data.get("topic") || "");
     const message = String(data.get("message") || "");
-    const subject = topic ? `Enquiry: ${topic}` : "Enquiry via rexindynamics.com";
-
-    // No endpoint configured: fall back to the visitor's mail client.
-    if (!WEB3FORMS_KEY) {
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
-      window.location.href = `mailto:contact@rexindynamics.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-      setStatus("sent");
-      return;
-    }
-
-    setStatus("sending");
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject,
-          from_name: name || "Rexin Dynamics website",
-          name,
-          email,
-          topic,
-          message,
-        }),
-      });
-      const json = await res.json();
-      setStatus(json.success ? "sent" : "error");
-    } catch {
-      setStatus("error");
-    }
+    const subject = encodeURIComponent(topic ? `Enquiry: ${topic}` : "Enquiry via rexindynamics.com");
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
+    window.location.href = `mailto:contact@rexindynamics.com?subject=${subject}&body=${body}`;
+    setSent(true);
   };
 
   return (
@@ -524,7 +492,7 @@ export default function Home() {
             </div>
 
             <div className="rx-rise" style={{ animationDelay: "0.08s", background: "#0e0e10", border: "1px solid #1f1f22", borderRadius: 20, padding: 28 }}>
-              {status !== "sent" ? (
+              {!sent ? (
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                     <span className="rx-field-label">Name</span>
@@ -547,16 +515,7 @@ export default function Home() {
                     <span className="rx-field-label">Message</span>
                     <textarea name="message" rows={3} placeholder="A line or two of context" className="rx-textarea" style={{ resize: "vertical" }} />
                   </label>
-                  {/* Honeypot: hidden from humans, catches bots */}
-                  <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" style={{ display: "none" }} aria-hidden />
-                  {status === "error" && (
-                    <p className="rx-mono" style={{ margin: 0, fontSize: 13, color: "var(--rx-orange-400)" }}>
-                      Something went wrong. Please email contact@rexindynamics.com directly.
-                    </p>
-                  )}
-                  <RXButton variant="solid" size="lg" type="submit" fullWidth disabled={status === "sending"}>
-                    {status === "sending" ? "Sending…" : "Send message"}
-                  </RXButton>
+                  <RXButton variant="solid" size="lg" type="submit" fullWidth>Send message</RXButton>
                 </form>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: 320, gap: 14 }}>
@@ -564,7 +523,7 @@ export default function Home() {
                     <RXIcon name="check" size={26} />
                   </span>
                   <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "#fff" }}>Message received.</h3>
-                  <p style={{ margin: 0, fontSize: 15, color: "#9C9A97", maxWidth: "32ch" }}>Thanks for reaching out. We&apos;ll reply to your email shortly.</p>
+                  <p style={{ margin: 0, fontSize: 15, color: "#9C9A97", maxWidth: "32ch" }}>Thanks for reaching out. Your email client should open with the message ready to send.</p>
                 </div>
               )}
             </div>
@@ -612,7 +571,7 @@ export default function Home() {
             </div>
           </div>
           <div style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid #2A2A2E", display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 13, color: "#6E6961" }}>© {new Date().getFullYear()} Rexin Dynamics Private Limited · Kochi, Kerala</span>
+            <span suppressHydrationWarning style={{ fontSize: 13, color: "#6E6961" }}>© {new Date().getFullYear()} Rexin Dynamics Private Limited · Kochi, Kerala</span>
             <span className="rx-mono" style={{ fontSize: 12, color: "#6E6961" }}>www.rexindynamics.com</span>
           </div>
         </div>

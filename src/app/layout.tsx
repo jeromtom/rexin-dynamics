@@ -29,7 +29,7 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rexindynamics.com"),
-  title: "Rexin Dynamics — Getting closer to Physical AI",
+  title: "Rexin Dynamics: Getting closer to Physical AI",
   description,
   keywords: [
     "AI automation",
@@ -66,20 +66,20 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://rexindynamics.com",
     siteName: "Rexin Dynamics",
-    title: "Rexin Dynamics — Getting closer to Physical AI",
+    title: "Rexin Dynamics: Getting closer to Physical AI",
     description,
     images: [
       {
         url: "https://rexindynamics.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Rexin Dynamics — AI, automation and aerial robotics",
+        alt: "Rexin Dynamics: AI, automation and aerial robotics",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rexin Dynamics — Getting closer to Physical AI",
+    title: "Rexin Dynamics: Getting closer to Physical AI",
     description,
     images: ["https://rexindynamics.com/og-image.jpg"],
     creator: "@rexindynamics",

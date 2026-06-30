@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Rexin Dynamics">
+  <rect width="120" height="120" rx="26" fill="#E84808"/>
+  <g fill="#FFFFFF" transform="translate(4,110) scale(0.14286,-0.14286)">
+    <path d="M57 0V700H384Q545 700 629.0 629.0Q713 558 713 436Q713 360 678.5 304.0Q644 248 581 216L728 0H476L357 176H293V0ZM293 354H379Q428 354 451.5 376.0Q475 398 475 436Q475 474 451.5 496.0Q428 518 379 518H293Z"/>
+  </g>
+</svg>
