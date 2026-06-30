@@ -1,28 +1,47 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Montserrat, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
+  variable: "--rx-font-display",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "900"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--rx-font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--rx-font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+const description =
+  "Rexin Dynamics is an AI and robotics company in Kochi, Kerala, India working with businesses worldwide. We deliver AI automation, website and web app development, AI voice agents and WhatsApp automation, and we are building indigenous autonomous drones and the agentic AI behind them, getting closer to Physical AI.";
 
 export const metadata: Metadata = {
-  title: "Rexin Dynamics - Pioneering the Future of Aerial Robotics",
-  description:
-    "Rexin Dynamics Private Limited is a cutting-edge drone and aerial robotics startup specializing in entertainment and defense applications. We bring spectacular drone light shows to life while developing confidential defense solutions for the future.",
+  metadataBase: new URL("https://rexindynamics.com"),
+  title: "Rexin Dynamics: Getting closer to Physical AI",
+  description,
   keywords: [
-    "drone light shows",
+    "AI automation",
+    "agentic AI",
+    "website development",
+    "web app development",
+    "AI voice agents",
+    "WhatsApp automation",
+    "autonomous drones",
     "aerial robotics",
-    "defense solutions",
-    "drone technology",
-    "entertainment",
+    "Physical AI",
+    "Kochi",
     "Kerala",
     "India",
     "Rexin Dynamics",
@@ -37,9 +56,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   openGraph: {
@@ -47,32 +66,85 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://rexindynamics.com",
     siteName: "Rexin Dynamics",
-    title: "Rexin Dynamics - Pioneering the Future of Aerial Robotics",
-    description: "Cutting-edge drone and aerial robotics startup specializing in entertainment and defense applications.",
+    title: "Rexin Dynamics: Getting closer to Physical AI",
+    description,
     images: [
       {
         url: "https://rexindynamics.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Rexin Dynamics - Aerial Robotics Company",
+        alt: "Rexin Dynamics: AI, automation and aerial robotics",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rexin Dynamics - Pioneering the Future of Aerial Robotics",
-    description: "Cutting-edge drone and aerial robotics startup specializing in entertainment and defense applications.",
+    title: "Rexin Dynamics: Getting closer to Physical AI",
+    description,
     images: ["https://rexindynamics.com/og-image.jpg"],
     creator: "@rexindynamics",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Rexin Dynamics Private Limited",
+  alternateName: "Rexin Dynamics",
+  url: "https://rexindynamics.com",
+  logo: "https://rexindynamics.com/og-image.jpg",
+  description,
+  slogan: "Getting closer to Physical AI.",
+  foundingLocation: "Kochi, Kerala, India",
+  areaServed: [
+    "Worldwide",
+    "United States",
+    "Canada",
+    "United Arab Emirates",
+    "United Kingdom",
+    "European Union",
+    "India",
+  ],
+  currenciesAccepted: "USD, CAD, AED, GBP, EUR, INR",
+  knowsAbout: [
+    "AI automation",
+    "Agentic AI",
+    "Multi-modal AI",
+    "Workflow automation",
+    "Website development",
+    "Web app development",
+    "AI voice agents",
+    "WhatsApp automation",
+    "Conversational AI",
+    "Aerial robotics",
+    "Autonomous drones",
+    "Swarm control systems",
+    "Custom drone manufacturing",
+    "Physical AI",
+  ],
+  email: "contact@rexindynamics.com",
+  telephone: "+91-89215-88769",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Kodinjiyil, Palakuzha, Muvattupuzha",
+    addressLocality: "Ernakulam",
+    addressRegion: "Kerala",
+    postalCode: "686662",
+    addressCountry: "IN",
   },
-  verification: {
-    google: "your-google-verification-code",
-  },
+  founder: [
+    { "@type": "Person", name: "Jerom Tom", jobTitle: "CEO" },
+    { "@type": "Person", name: "Junaid CK", jobTitle: "CTO" },
+  ],
+  sameAs: [
+    "https://linkedin.com/company/rexin-dynamics",
+    "https://instagram.com/rexindynamics",
+  ],
 };
 
 export default function RootLayout({
@@ -83,11 +155,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${montserrat.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
