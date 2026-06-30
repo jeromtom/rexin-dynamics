@@ -31,6 +31,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://rexindynamics.com"),
   title: "Rexin Dynamics: Getting closer to Physical AI",
   description,
+  alternates: { canonical: "/" },
   keywords: [
     "AI automation",
     "agentic AI",
@@ -145,6 +146,67 @@ const organizationJsonLd = {
     "https://linkedin.com/company/rexin-dynamics",
     "https://instagram.com/rexindynamics",
   ],
+  makesOffer: [
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        serviceType: "AI automation",
+        name: "AI automation",
+        description:
+          "Agentic workflows that connect your tools and run the busywork: data entry, follow-ups, routing and reporting, with a human in the loop. Delivered for businesses worldwide.",
+      },
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        serviceType: "Web development",
+        name: "Website and web app development",
+        description:
+          "Fast, modern websites and web apps designed and built to ship, from marketing sites to full product front-ends.",
+      },
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        serviceType: "AI voice agent",
+        name: "AI voice agents",
+        description:
+          "AI voice agents that answer calls, qualify leads and book appointments around the clock in a natural voice.",
+      },
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        serviceType: "WhatsApp automation",
+        name: "WhatsApp agents",
+        description:
+          "WhatsApp automation that replies instantly, routes conversations and follows up where your customers already are.",
+      },
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        serviceType: "Aerial robotics",
+        name: "Autonomous drones and flight systems",
+        description:
+          "Custom drone builds, autonomous flight R&D and hands-on workshops, the engineering behind our path to Physical AI.",
+      },
+    },
+  ],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Rexin Dynamics",
+  url: "https://rexindynamics.com",
+  publisher: { "@type": "Organization", name: "Rexin Dynamics Private Limited" },
+  inLanguage: "en",
 };
 
 export default function RootLayout({
@@ -160,6 +222,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <ThemeProvider>{children}</ThemeProvider>
       </body>

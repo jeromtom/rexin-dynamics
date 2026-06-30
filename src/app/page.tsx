@@ -59,6 +59,51 @@ const topics = [
   "Something else",
 ];
 
+const faqs = [
+  {
+    q: "What does Rexin Dynamics do?",
+    a: "Rexin Dynamics is an AI and robotics company in Kochi, Kerala, India. We build AI automation, websites and web apps, AI voice agents and WhatsApp automation for businesses worldwide, and we develop autonomous drones and the agentic AI behind them, getting closer to Physical AI.",
+  },
+  {
+    q: "Where is Rexin Dynamics based?",
+    a: "We are based in Kochi, Kerala, India, and registered at Kodinjiyil, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662.",
+  },
+  {
+    q: "Do you work with clients outside India?",
+    a: "Yes. Most of our clients are international. We invoice in USD, CAD, AED, GBP, EUR and INR and settle through local bank accounts, so working with us feels local wherever you are.",
+  },
+  {
+    q: "What AI and software services do you offer?",
+    a: "AI automation, website and web app development, AI voice agents, and WhatsApp automation, all delivered to production.",
+  },
+  {
+    q: "What do you build in robotics?",
+    a: "Custom drone builds, autonomous flight R&D, and hands-on workshops and labs. This aerial robotics work is our path toward Physical AI, funded by our AI and software services.",
+  },
+  {
+    q: "Who founded Rexin Dynamics?",
+    a: "Rexin Dynamics was founded by Jerom Tom (CEO) and Junaid CK (CTO).",
+  },
+  {
+    q: "Is Rexin Dynamics backed by any institution?",
+    a: "Yes. We are incubated and supported by IPTIF, IIT Palakkad under the DISHA-EIR Program, and by Buimerc India Foundation.",
+  },
+  {
+    q: "How can I contact Rexin Dynamics?",
+    a: "Email contact@rexindynamics.com or call +91 89215 88769. You can also use the contact form on this page.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
 const sectionPad = "90px 28px";
 
 export default function Home() {
@@ -447,6 +492,46 @@ export default function Home() {
                   </span>
                 </div>
               </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FAQ ===== */}
+      <section id="faq" style={{ padding: "0 28px 96px" }}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <div style={{ maxWidth: 820, margin: "0 auto" }}>
+          <div className="rx-rise" style={{ marginBottom: 36 }}>
+            <div style={{ marginBottom: 14 }}><Eyebrow>FAQ</Eyebrow></div>
+            <h2 className="rx-h2">Questions, answered.</h2>
+          </div>
+          <div className="rx-faq" style={{ borderTop: "1px solid var(--rx-border)" }}>
+            {faqs.map((f) => (
+              <details
+                key={f.q}
+                className="rx-rise"
+                style={{ borderBottom: "1px solid var(--rx-border)", padding: "20px 0" }}
+              >
+                <summary
+                  style={{
+                    cursor: "pointer",
+                    listStyle: "none",
+                    fontFamily: "var(--rx-font-display)",
+                    fontWeight: 700,
+                    fontSize: 18,
+                    letterSpacing: "-0.01em",
+                    color: "var(--rx-text)",
+                  }}
+                >
+                  {f.q}
+                </summary>
+                <p style={{ margin: "12px 0 0", fontSize: 15.5, lineHeight: 1.65, color: "var(--rx-text-muted)" }}>
+                  {f.a}
+                </p>
+              </details>
             ))}
           </div>
         </div>
