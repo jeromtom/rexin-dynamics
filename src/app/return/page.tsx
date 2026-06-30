@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/return/" },
   title: "Return Policy - Rexin Dynamics",
   description: "Return Policy for Rexin Dynamics Platform",
 };

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BankDetailsClient from "./bank-details-client";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/bank-details/" },
   title: "Bank Transfer Details - Rexin Dynamics",
   description: "Bank account details for NEFT/RTGS transfers to Rexin Dynamics Private Limited",
   robots: {

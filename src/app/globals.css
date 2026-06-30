@@ -481,6 +481,21 @@
 .rx-input::placeholder,
 .rx-textarea::placeholder { color: #6e6961; }
 
+/* FAQ disclosure */
+.rx-faq summary { position: relative; padding-right: 30px; }
+.rx-faq summary::-webkit-details-marker { display: none; }
+.rx-faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 0;
+  font-family: var(--rx-font-mono);
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--rx-text-muted);
+}
+.rx-faq details[open] summary::after { content: "\2013"; }
+
 /* Enhanced Drone Light Show Animations */
 @keyframes droneFloat {
   0%, 100% { 

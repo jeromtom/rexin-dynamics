@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy/" },
   title: "Privacy Policy - Rexin Dynamics",
   description: "Privacy Policy for Rexin Dynamics Platform",
 };

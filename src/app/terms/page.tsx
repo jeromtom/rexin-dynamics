@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/terms/" },
   title: "Terms & Conditions - Rexin Dynamics",
   description: "Terms and Conditions for using Rexin Dynamics Platform",
 };
