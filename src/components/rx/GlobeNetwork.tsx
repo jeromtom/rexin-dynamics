@@ -185,7 +185,7 @@ export function GlobeNetwork() {
         background: "radial-gradient(125% 95% at 50% 34%, #191920 0%, #0A0A0B 64%)",
         border: "1px solid #232323",
         borderRadius: 20,
-        height: 480,
+        height: "clamp(320px, 62vw, 480px)",
       }}
     >
       <div ref={elRef} style={{ position: "absolute", inset: 0 }} />

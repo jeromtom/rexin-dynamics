@@ -19,6 +19,7 @@ export function RXButton({
   fullWidth,
   type,
   style,
+  className: extraClassName,
 }: {
   children: ReactNode;
   variant?: "solid" | "outline";
@@ -28,12 +29,14 @@ export function RXButton({
   fullWidth?: boolean;
   type?: "button" | "submit";
   style?: CSSProperties;
+  className?: string;
 }) {
   const className = [
     "rx-btn",
     `rx-btn-${variant}`,
     `rx-btn-${size}`,
     fullWidth ? "rx-btn-full" : "",
+    extraClassName ?? "",
   ]
     .filter(Boolean)
     .join(" ");

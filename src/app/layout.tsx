@@ -139,8 +139,8 @@ const organizationJsonLd = {
     addressCountry: "IN",
   },
   founder: [
-    { "@type": "Person", name: "Jerom Tom", jobTitle: "CEO" },
-    { "@type": "Person", name: "Junaid CK", jobTitle: "CTO" },
+    { "@type": "Person", name: "Jerom Tom", jobTitle: "CEO", sameAs: ["https://linkedin.com/in/jeromtom"] },
+    { "@type": "Person", name: "Junaid CK", jobTitle: "CTO", sameAs: ["https://www.linkedin.com/in/junaid-c-k/"] },
   ],
   sameAs: [
     "https://linkedin.com/company/rexin-dynamics",
