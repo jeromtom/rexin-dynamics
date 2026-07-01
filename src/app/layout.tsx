@@ -151,6 +151,16 @@ const organizationJsonLd = {
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
+        serviceType: "MVP development",
+        name: "MVP in 7 days",
+        description:
+          "A one-week sprint that takes an idea to a working product: a web app, AI agent or automation, scoped on day one and live in production on day seven, at a fixed price.",
+      },
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
         serviceType: "AI automation",
         name: "AI automation",
         description:

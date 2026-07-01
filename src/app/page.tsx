@@ -58,6 +58,7 @@ const engageSteps = [
 ];
 
 const topics = [
+  "MVP in 7 days",
   "AI automation",
   "Website development",
   "Voice agent",
@@ -121,7 +122,6 @@ const sectionPadBottom = "0 var(--rx-section-x) var(--rx-section-y)";
 export default function Home() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [tab, setTab] = useState<"ai" | "air">("ai");
   const [currency, setCurrency] = useState("USD");
   const [sent, setSent] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -129,6 +129,30 @@ export default function Home() {
   const bloomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setMounted(true), []);
+
+  // Reveal .rx-rise blocks as they scroll into view (design spec: gentle
+  // fade-up on scroll). Without JS the CSS mount animation still runs.
+  useEffect(() => {
+    document.documentElement.classList.add("rx-js");
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".rx-rise"));
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((el) => el.classList.add("rx-in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("rx-in");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   // Hero spotlight follows the cursor (night/show context only).
   useEffect(() => {
@@ -284,6 +308,10 @@ export default function Home() {
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto", padding: "24px var(--rx-section-x) 78px" }}>
           <div className="rx-mono" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, paddingBottom: 24, borderBottom: "1px solid #1a1a1d", fontSize: 11, letterSpacing: "0.12em", color: "#6E6961", flexWrap: "wrap" }}>
             <span>REXIN&nbsp;DYNAMICS&nbsp;&nbsp;<span style={{ color: "#9C9A97" }}>{"//"}</span>&nbsp;&nbsp;KOCHI, KERALA · INDIA</span>
+            <a href="#services" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--rx-orange-400)", textDecoration: "none" }}>
+              <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
+              NEW&nbsp;{"//"}&nbsp;MVP IN 7 DAYS
+            </a>
           </div>
 
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1.12fr .88fr", gap: "48px 56px", alignItems: "center", marginTop: 52 }}>
@@ -360,47 +388,73 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="rx-rise" style={{ display: "inline-flex", gap: 6, padding: 5, background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: "var(--rx-radius-full)", marginTop: 28 }}>
-            {(["ai", "air"] as const).map((t) => {
-              const active = tab === t;
-              return (
-                <button
-                  key={t}
-                  onClick={() => setTab(t)}
-                  style={{
-                    padding: "9px 18px",
-                    border: 0,
-                    borderRadius: "var(--rx-radius-full)",
-                    fontFamily: "var(--rx-font-body)",
-                    fontSize: 14,
-                    fontWeight: active ? 700 : 600,
-                    cursor: "pointer",
-                    background: active ? "var(--rx-accent)" : "transparent",
-                    color: active ? "var(--rx-on-accent)" : "var(--rx-text-muted)",
-                    whiteSpace: "nowrap",
-                    transition: "background .15s, color .15s",
-                  }}
-                >
-                  {t === "ai" ? "AI & Software" : "Aerial Robotics"}
-                </button>
-              );
-            })}
+          <div className="rx-rise rx-mono" style={{ marginTop: 40, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-text-muted)" }}>
+            <span style={{ color: "var(--rx-accent)" }}>/ 01</span> — AI &amp; SOFTWARE
           </div>
-
           <div
             className="rx-rise rx-stack"
             style={{
               display: "grid",
-              gridTemplateColumns: tab === "ai" ? "repeat(2,1fr)" : "repeat(3,1fr)",
+              gridTemplateColumns: "repeat(2,1fr)",
               gap: 1,
-              marginTop: 22,
+              marginTop: 14,
               background: "var(--rx-border)",
               border: "1px solid var(--rx-border)",
               borderRadius: 14,
               overflow: "hidden",
             }}
           >
-            {(tab === "ai" ? aiServices : airServices).map((card) => (
+            <div className="rx-night rx-mvp-card" style={{ gridColumn: "1 / -1", position: "relative", overflow: "hidden", background: "#0A0A0B", padding: "34px 30px" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden className="rx-drift" style={{ position: "absolute", inset: "-30% -6% auto -6%", width: "112%", opacity: 0.4, pointerEvents: "none" }} />
+              <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
+                <span className="rx-mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-orange-400)" }}>
+                  <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
+                  FLAGSHIP {"//"} 7-DAY SPRINT
+                </span>
+                <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 900, fontSize: "clamp(28px,3.6vw,40px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: 0, color: "#fff" }}>
+                  MVP in 7 days.
+                </h3>
+                <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "#cfcdc9", maxWidth: "58ch" }}>
+                  Take your idea to a working product in one week: a web app, AI agent or automation, scoped with you on day one and live in production on day seven. Fixed price, in your currency.
+                </p>
+                <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "#9C9A97" }}>
+                  D01 SCOPE&nbsp;&nbsp;<span style={{ color: "var(--rx-orange-400)" }}>{"//"}</span>&nbsp;&nbsp;D02–06 BUILD&nbsp;&nbsp;<span style={{ color: "var(--rx-orange-400)" }}>{"//"}</span>&nbsp;&nbsp;D07 LIVE
+                </div>
+                <RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton>
+              </div>
+            </div>
+            {aiServices.map((card) => (
+              <div key={card.title} className="rx-service-card">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
+                    <RXIcon name={card.icon} size={22} />
+                  </span>
+                  <span className="rx-mono" style={{ fontSize: 10, letterSpacing: "0.1em", color: "var(--rx-text-muted)" }}>{card.tag}</span>
+                </div>
+                <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 21, margin: "6px 0 0", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{card.title}</h3>
+                <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{card.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="rx-rise rx-mono" style={{ marginTop: 40, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-text-muted)" }}>
+            <span style={{ color: "var(--rx-accent)" }}>/ 02</span> — AERIAL ROBOTICS · THE MISSION
+          </div>
+          <div
+            className="rx-rise rx-stack"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3,1fr)",
+              gap: 1,
+              marginTop: 14,
+              background: "var(--rx-border)",
+              border: "1px solid var(--rx-border)",
+              borderRadius: 14,
+              overflow: "hidden",
+            }}
+          >
+            {airServices.map((card) => (
               <div key={card.title} className="rx-service-card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
