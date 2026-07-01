@@ -13,12 +13,14 @@ export type RXIconName =
   | "grid"
   | "mail"
   | "mapPin"
+  | "menu"
   | "message"
   | "moon"
   | "phone"
   | "radio"
   | "sun"
-  | "target";
+  | "target"
+  | "x";
 
 const PATHS: Record<RXIconName, ReactNode> = {
   arrowUpRight: (
@@ -96,6 +98,7 @@ const PATHS: Record<RXIconName, ReactNode> = {
       <path d="M9 11.6h.01M12.5 11.6h.01M16 11.6h.01" />
     </>
   ),
+  menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   moon: <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />,
   phone: (
     <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z" />
@@ -120,6 +123,7 @@ const PATHS: Record<RXIconName, ReactNode> = {
       <circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none" />
     </>
   ),
+  x: <path d="M18 6 6 18M6 6l12 12" />,
 };
 
 export function RXIcon({
