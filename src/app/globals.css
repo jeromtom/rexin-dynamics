@@ -368,7 +368,11 @@
   @keyframes rxBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.15; } }
   @keyframes rxDrift { from { transform: translateX(0); } to { transform: translateX(-4%); } }
   @keyframes rxRadar { to { transform: rotate(360deg); } }
-  .rx-rise { animation: rxRise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .rx-rise { animation: rxRise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  /* With JS, reveals wait until scrolled into view (IntersectionObserver
+     adds .rx-in). Without JS the mount animation above still runs. */
+  .rx-js .rx-rise { animation-play-state: paused; }
+  .rx-js .rx-rise.rx-in { animation-play-state: running; }
   .rx-tw { animation: rxTwinkle 3.2s ease-in-out infinite; }
   .rx-blink { animation: rxBlink 1.4s step-end infinite; }
   .rx-drift { animation: rxDrift 34s ease-in-out infinite alternate; }
@@ -510,6 +514,10 @@
   box-shadow: inset 0 0 0 1px rgba(232, 72, 8, 0.35), 0 12px 32px rgba(232, 72, 8, 0.12);
   transform: translateY(-2px);
 }
+
+/* Flagship MVP card (night context inside the day services grid) */
+.rx-mvp-card { transition: box-shadow 0.2s ease; }
+.rx-mvp-card:hover { box-shadow: inset 0 0 0 1px rgba(232, 72, 8, 0.5), 0 12px 40px rgba(232, 72, 8, 0.18); }
 
 /* Backed-by card */
 .rx-backed-card {
