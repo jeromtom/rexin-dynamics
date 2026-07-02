@@ -589,30 +589,32 @@ export default function Home() {
               { name: "Jerom Tom", role: "CEO · FOUNDER", desc: "Leads the vision and strategy.", img: "/team-jerom.png", email: "jerom@rexindynamics.com", linkedin: "https://linkedin.com/in/jeromtom" },
               { name: "Junaid CK", role: "CTO · FOUNDER", desc: "Develops the software and flight systems.", img: "/team-junaid.png", email: "junaid@rexindynamics.com", linkedin: "https://www.linkedin.com/in/junaid-c-k/" },
             ].map((m, i) => (
-              <GlowCard key={m.name} className="rx-rise rx-team-card" style={{ animationDelay: i ? "0.07s" : undefined, background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
-                <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={m.img} alt={`${m.name}, ${m.role.split(" · ")[0]} of Rexin Dynamics`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                </div>
-                <div>
-                  <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>{m.role}</div>
-                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>{m.name}</h3>
-                  <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>{m.desc}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
-                    <a href={`mailto:${m.email}`} className="rx-mono" style={{ fontSize: 12, color: "var(--rx-text-muted)" }}>{m.email}</a>
-                    <a
-                      href={m.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rx-mono"
-                      aria-label={`${m.name} on LinkedIn`}
-                      style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, color: "var(--rx-accent)" }}
-                    >
-                      LINKEDIN <RXIcon name="arrowUpRight" size={13} />
-                    </a>
+              <div key={m.name} className="rx-rise" style={{ animationDelay: i ? "0.07s" : undefined }}>
+                <GlowCard className="rx-team-card" style={{ background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
+                  <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={m.img} alt={`${m.name}, ${m.role.split(" · ")[0]} of Rexin Dynamics`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
-                </div>
-              </GlowCard>
+                  <div>
+                    <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>{m.role}</div>
+                    <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>{m.name}</h3>
+                    <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>{m.desc}</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
+                      <a href={`mailto:${m.email}`} className="rx-mono" style={{ fontSize: 12, color: "var(--rx-text-muted)" }}>{m.email}</a>
+                      <a
+                        href={m.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rx-mono"
+                        aria-label={`${m.name} on LinkedIn`}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, color: "var(--rx-accent)" }}
+                      >
+                        LINKEDIN <RXIcon name="arrowUpRight" size={13} />
+                      </a>
+                    </div>
+                  </div>
+                </GlowCard>
+              </div>
             ))}
           </div>
         </div>

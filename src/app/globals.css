@@ -643,12 +643,13 @@
 .rx-glow-card {
   position: relative;
   transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-  transition: transform 0.18s ease;
+  transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .rx-glow-card::after {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   pointer-events: none;
   opacity: 0;
   background: radial-gradient(
