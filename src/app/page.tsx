@@ -267,8 +267,8 @@ export default function Home() {
             >
               <RXIcon name={isNight ? "sun" : "moon"} size={18} />
             </button>
-            <Magnetic>
-              <RXButton variant="solid" size="sm" href="#contact" className="rx-hide-sm">
+            <Magnetic className="rx-hide-sm">
+              <RXButton variant="solid" size="sm" href="#contact">
                 Get in touch
               </RXButton>
             </Magnetic>

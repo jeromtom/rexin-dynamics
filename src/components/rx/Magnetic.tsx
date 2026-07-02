@@ -5,7 +5,15 @@ import { m, useReducedMotion, useSpring } from "motion/react";
 
 /* Wrapper that lets a CTA drift a few pixels toward the mouse cursor and
    spring back on leave. Mouse only; inert for touch and reduced motion. */
-export function Magnetic({ children, pull = 0.24 }: { children: ReactNode; pull?: number }) {
+export function Magnetic({
+  children,
+  pull = 0.24,
+  className,
+}: {
+  children: ReactNode;
+  pull?: number;
+  className?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const x = useSpring(0, { stiffness: 320, damping: 22 });
@@ -28,6 +36,7 @@ export function Magnetic({ children, pull = 0.24 }: { children: ReactNode; pull?
   return (
     <m.div
       ref={ref}
+      className={className}
       style={{ display: "inline-block", x, y }}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
