@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { RXMotion } from "@/components/rx/RXMotion";
+import { Magnetic } from "@/components/rx/Magnetic";
 import { useTheme } from "@/components/theme-provider";
 import { RXIcon, type RXIconName } from "@/components/rx/RXIcon";
 import { RXButton, Eyebrow, Badge, Stat } from "@/components/rx/primitives";
@@ -266,9 +267,11 @@ export default function Home() {
             >
               <RXIcon name={isNight ? "sun" : "moon"} size={18} />
             </button>
-            <RXButton variant="solid" size="sm" href="#contact" className="rx-hide-sm">
-              Get in touch
-            </RXButton>
+            <Magnetic>
+              <RXButton variant="solid" size="sm" href="#contact" className="rx-hide-sm">
+                Get in touch
+              </RXButton>
+            </Magnetic>
             <button
               onClick={() => setMenuOpen((o) => !o)}
               className="rx-icon-btn rx-show-sm"
@@ -347,7 +350,7 @@ export default function Home() {
                 Rexin Dynamics builds AI automation, websites, and voice and WhatsApp agents for businesses around the world. We put the proceeds into a harder mission: autonomous drones and the agentic AI behind them. Engineered in Kerala, delivered globally.
               </p>
               <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
-                <RXButton variant="solid" size="lg" href="#contact">Get in touch</RXButton>
+                <Magnetic><RXButton variant="solid" size="lg" href="#contact">Get in touch</RXButton></Magnetic>
                 <RXButton variant="outline" size="lg" href="#services">View services</RXButton>
               </div>
             </div>
@@ -497,7 +500,7 @@ export default function Home() {
                 In a hurry? This whole process runs in a single week: a web app, AI agent or automation, scoped with you on day one and live in production on day seven. Fixed price, in your currency.
               </p>
               <SprintTimeline />
-              <RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton>
+              <Magnetic><RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton></Magnetic>
             </div>
           </div>
         </div>
