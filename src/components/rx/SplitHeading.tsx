@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react";
 import { m, useInView, useReducedMotion } from "motion/react";
 
 /* Section heading that reveals word by word (rise + deblur) when scrolled
@@ -34,21 +34,22 @@ export function SplitHeading({
   return (
     <h2 ref={ref} className={className} style={style} aria-label={children}>
       {words.map((w, i) => (
-        <span
-          key={`${w}-${i}`}
-          aria-hidden
-          style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}
-        >
-          <m.span
-            style={{ display: "inline-block" }}
-            initial={{ y: "110%", opacity: 0, filter: "blur(6px)" }}
-            animate={inView ? { y: 0, opacity: 1, filter: "blur(0px)" } : undefined}
-            transition={{ duration: 0.5, delay: i * 0.045, ease: [0.2, 0.7, 0.2, 1] }}
+        <Fragment key={`${w}-${i}`}>
+          <span
+            aria-hidden
+            style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}
           >
-            {w}
-          </m.span>
+            <m.span
+              style={{ display: "inline-block" }}
+              initial={{ y: "110%", opacity: 0, filter: "blur(6px)" }}
+              animate={inView ? { y: 0, opacity: 1, filter: "blur(0px)" } : undefined}
+              transition={{ duration: 0.5, delay: i * 0.045, ease: [0.2, 0.7, 0.2, 1] }}
+            >
+              {w}
+            </m.span>
+          </span>
           {i < words.length - 1 ? " " : ""}
-        </span>
+        </Fragment>
       ))}
     </h2>
   );
