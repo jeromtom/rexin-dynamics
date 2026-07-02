@@ -10,6 +10,7 @@ import { HeroFormation } from "@/components/rx/HeroFormation";
 import { GlobeNetwork } from "@/components/rx/GlobeNetwork";
 import { SprintTimeline } from "@/components/rx/SprintTimeline";
 import { SplitHeading } from "@/components/rx/SplitHeading";
+import { ParallaxMotif } from "@/components/rx/ParallaxMotif";
 
 const MAX_W = 1200;
 
@@ -383,8 +384,7 @@ export default function Home() {
             </div>
             <div className="rx-rise" style={{ animationDelay: "0.08s", position: "relative", borderRadius: 14, overflow: "hidden", border: "1px solid var(--rx-border)" }}>
               <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#070708" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden className="rx-drift" style={{ position: "absolute", inset: "-10% -4% auto -4%", width: "108%", opacity: 0.85 }} />
+                <ParallaxMotif strength={36} style={{ position: "absolute", inset: "-10% -4% auto -4%", width: "108%", opacity: 0.85 }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(232,72,8,.16), transparent 55%)" }} />
                 <span className="rx-mono" style={{ position: "absolute", bottom: 14, left: 14, fontSize: 10.5, letterSpacing: "0.12em", color: "rgba(255,255,255,.82)" }}>LAB // KOCHI · R&D</span>
               </div>
@@ -509,8 +509,7 @@ export default function Home() {
 
       {/* ===== Global ===== */}
       <section id="global" style={{ position: "relative", overflow: "hidden", padding: sectionPad, borderTop: "1px solid var(--rx-border)" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden style={{ position: "absolute", inset: "-20% 0 auto 0", width: "100%", opacity: 0.1, pointerEvents: "none" }} />
+        <ParallaxMotif strength={80} style={{ position: "absolute", inset: "-20% 0 auto 0", width: "100%", opacity: 0.1, pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
             <div className="rx-rise">
@@ -696,8 +695,7 @@ export default function Home() {
 
       {/* ===== Contact (always night) ===== */}
       <section id="contact" className="rx-night" style={{ position: "relative", overflow: "hidden", padding: sectionPad, borderTop: "1px solid #1f1f22", background: "#0A0A0B", color: "#fff" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden style={{ position: "absolute", inset: "auto 0 -30% 0", width: "100%", opacity: 0.16, pointerEvents: "none" }} />
+        <ParallaxMotif strength={80} style={{ position: "absolute", inset: "auto 0 -30% 0", width: "100%", opacity: 0.16, pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
             <div className="rx-rise">
@@ -775,8 +773,7 @@ export default function Home() {
 
       {/* ===== Footer (always night) ===== */}
       <footer className="rx-night" style={{ position: "relative", overflow: "hidden", borderTop: "1px solid #1f1f22", background: "#0A0A0B", color: "#fff" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden style={{ position: "absolute", top: 0, left: 0, width: "100%", opacity: 0.28, pointerEvents: "none" }} />
+        <ParallaxMotif strength={50} style={{ position: "absolute", top: 0, left: 0, width: "100%", opacity: 0.28, pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto", padding: "64px var(--rx-section-x) 36px" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 48, justifyContent: "space-between" }}>
             <div style={{ maxWidth: 300 }}>
