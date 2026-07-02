@@ -84,14 +84,11 @@ export function EngageSequence({ steps }: { steps: Step[] }) {
     </div>
   );
 
-  /* ref is attached in both branches so useScroll always has its target */
-  if (!desktop || reduce) return <div ref={ref}>{grid(null)}</div>;
-
   return (
-    <div ref={ref} style={{ height: "220vh" }}>
-      <div style={{ position: "sticky", top: 140 }}>
-        {grid(active)}
-        <Progress value={scrollYProgress} />
+    <div ref={ref} className="rx-engage-track">
+      <div className="rx-engage-sticky">
+        {grid(desktop && !reduce ? active : null)}
+        {desktop && !reduce ? <Progress value={scrollYProgress} /> : null}
       </div>
     </div>
   );

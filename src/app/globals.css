@@ -636,3 +636,12 @@
   .rx-glow-card { transform: none !important; }
   .rx-glow-card::after { display: none; }
 }
+
+/* Engage sequence pin (Task 5 of motion pass): layout via media queries so
+   first paint matches hydrated layout (no post-hydration shift) */
+.rx-engage-track { height: auto; }
+.rx-engage-sticky { position: static; }
+@media (min-width: 821px) and (prefers-reduced-motion: no-preference) {
+  .rx-engage-track { height: 220vh; }
+  .rx-engage-sticky { position: sticky; top: 140px; }
+}
