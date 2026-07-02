@@ -559,6 +559,45 @@
 .rx-input::placeholder,
 .rx-textarea::placeholder { color: #6e6961; }
 
+/* Legal / policy page content (used inside LegalShell) */
+.rx-legal {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--rx-text-muted);
+}
+.rx-legal p { margin: 0; }
+.rx-legal h2 {
+  font-family: var(--rx-font-display);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  color: var(--rx-text);
+  margin: 16px 0 0;
+}
+.rx-legal section { display: flex; flex-direction: column; gap: 10px; }
+.rx-legal strong { color: var(--rx-text); font-weight: 600; }
+.rx-legal a { color: var(--rx-accent); text-decoration: none; }
+.rx-legal a:hover { text-decoration: underline; }
+.rx-legal ul, .rx-legal ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+.rx-legal-em { color: var(--rx-text); font-weight: 600; }
+.rx-legal-updated {
+  font-family: var(--rx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rx-text-muted);
+}
+.rx-legal-callout {
+  padding: 16px 18px;
+  background: var(--rx-surface);
+  border: 1px solid var(--rx-border);
+  border-radius: 12px;
+}
+
 /* FAQ disclosure */
 .rx-faq summary { position: relative; padding-right: 30px; }
 .rx-faq summary::-webkit-details-marker { display: none; }
