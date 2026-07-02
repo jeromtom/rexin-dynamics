@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { LegalShell } from "@/components/rx/LegalShell";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/shipping/" },
@@ -10,133 +9,36 @@ export const metadata: Metadata = {
 
 export default function ShippingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Navigation */}
-      <nav className="fixed top-0 z-50 w-full border-b border-border/70 backdrop-blur-sm bg-background/75">
-        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-sm uppercase tracking-[0.3em] text-muted-foreground">
-              <span className="font-bold">REXIN</span> <span className="font-normal">Dynamics</span>
-            </span>
-          </Link>
-          <ThemeToggle />
-        </div>
-      </nav>
+    <LegalShell
+      title="Shipping Policy"
+      intro="Rexin Dynamics Private Limited – Registered Address: KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662."
+    >
+      <p className="rx-legal-updated" suppressHydrationWarning>
+        Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+      </p>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-        <div className="mb-10 space-y-3">
-          <p className="text-[0.7rem] uppercase tracking-[0.3em] text-muted-foreground">
-            Policy
-          </p>
-          <h1 className="text-2xl font-medium tracking-tight sm:text-3xl">
-            Shipping Policy
-          </h1>
-          <p className="text-sm text-muted-foreground sm:text-base">
-            Rexin Dynamics Private Limited – Registered Address: KODINJIYIL, Palakuzha, Muvattupuzha,
-            Ernakulam, Kerala 686662.
-          </p>
-        </div>
+      <section>
+        <h2>Shipping Policy</h2>
+        <p>
+          We mainly provide services. If anything is to be shipped, it will be via third party vendors.
+        </p>
+      </section>
 
-        <div className="space-y-6 text-sm text-muted-foreground leading-relaxed">
-          <p className="text-xs text-muted-foreground/80 italic">
-            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </p>
-
-          <section>
-            <h2 className="text-base font-medium mb-2 text-foreground">Shipping Policy</h2>
-            <p>
-              We mainly provide services. If anything is to be shipped, it will be via third party vendors.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-base font-medium mb-2 text-foreground">Contact Information</h2>
-            <div className="mt-2 space-y-1 text-sm">
-              <p>
-                <strong>Business Name:</strong> Rexin Dynamics Private Limited
-              </p>
-              <p>
-                <strong>Email:</strong>{" "}
-                <a
-                  href="mailto:contact@rexindynamics.com"
-                  className="text-foreground underline-offset-4 hover:underline"
-                >
-                  contact@rexindynamics.com
-                </a>
-              </p>
-              <p>
-                <strong>Mobile:</strong> +91 89215 88769
-              </p>
-              <p>
-                <strong>Address:</strong> KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662, India
-              </p>
-            </div>
-          </section>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-border/70">
-          <Link
-            href="/"
-            className="text-sm text-muted-foreground hover:text-foreground underline-offset-4 hover:underline transition-colors"
-          >
-            ← Back to Home
-          </Link>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-background py-8 text-center text-xs text-muted-foreground">
-        <div className="mx-auto max-w-4xl space-y-3 px-4">
-          <div>
-            <p className="text-[0.7rem] uppercase tracking-[0.25em]">
-              Rexin Dynamics Private Limited
-            </p>
-            <p className="mt-1">
-              Pioneering the future of aerial robotics · Kerala, India
-            </p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              href="/terms"
-              className="underline-offset-4 hover:underline"
-            >
-              Terms &amp; Conditions
-            </Link>
-            <span>·</span>
-            <Link
-              href="/privacy"
-              className="underline-offset-4 hover:underline"
-            >
-              Privacy Policy
-            </Link>
-            <span>·</span>
-            <Link
-              href="/refund-cancellation"
-              className="underline-offset-4 hover:underline"
-            >
-              Refund &amp; Cancellation
-            </Link>
-            <span>·</span>
-            <Link
-              href="/return"
-              className="underline-offset-4 hover:underline"
-            >
-              Return Policy
-            </Link>
-            <span>·</span>
-            <Link
-              href="/shipping"
-              className="underline-offset-4 hover:underline"
-            >
-              Shipping Policy
-            </Link>
-          </div>
-
-          <p>© {new Date().getFullYear()} Rexin Dynamics Private Limited. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+      <section className="rx-legal-callout">
+        <h2 style={{ margin: 0 }}>Contact Information</h2>
+        <p>
+          <strong>Business Name:</strong> Rexin Dynamics Private Limited
+        </p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:contact@rexindynamics.com">contact@rexindynamics.com</a>
+        </p>
+        <p>
+          <strong>Mobile:</strong> +91 89215 88769
+        </p>
+        <p>
+          <strong>Address:</strong> KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662, India
+        </p>
+      </section>
+    </LegalShell>
   );
 }
-
