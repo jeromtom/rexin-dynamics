@@ -9,6 +9,7 @@ import { RXButton, Eyebrow, Badge, Stat } from "@/components/rx/primitives";
 import { HeroFormation } from "@/components/rx/HeroFormation";
 import { GlobeNetwork } from "@/components/rx/GlobeNetwork";
 import { SprintTimeline } from "@/components/rx/SprintTimeline";
+import { SplitHeading } from "@/components/rx/SplitHeading";
 
 const MAX_W = 1200;
 
@@ -368,7 +369,7 @@ export default function Home() {
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: ".92fr 1.08fr", gap: 56, alignItems: "center" }}>
             <div className="rx-rise">
               <div style={{ marginBottom: 14 }}><Eyebrow>About</Eyebrow></div>
-              <h2 className="rx-h2">We ship AI for the world. We fund robotics for the future.</h2>
+              <SplitHeading>We ship AI for the world. We fund robotics for the future.</SplitHeading>
               <p style={{ margin: "20px 0 0", fontSize: 16.5, lineHeight: 1.65, color: "var(--rx-text)" }}>
                 Rexin Dynamics is an engineering-led studio in Kochi, Kerala. For companies around the world we design and ship AI automation, websites, and voice and WhatsApp agents that go straight into production.
               </p>
@@ -397,7 +398,7 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ maxWidth: 680 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>What we do</Eyebrow></div>
-            <h2 className="rx-h2">Two engines, one company.</h2>
+            <SplitHeading>Two engines, one company.</SplitHeading>
             <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "54ch" }}>
               AI and software pay the bills today. Aerial robotics is where we are headed. Both run on the same engineering discipline.
             </p>
@@ -470,7 +471,7 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ maxWidth: 680, marginBottom: 32 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>How we engage</Eyebrow></div>
-            <h2 className="rx-h2">From first call to production.</h2>
+            <SplitHeading>From first call to production.</SplitHeading>
             <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "56ch" }}>
               A simple process built for international clients: clear scope, a fixed quote in your currency, and delivery you can track.
             </p>
@@ -514,7 +515,7 @@ export default function Home() {
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
             <div className="rx-rise">
               <div style={{ marginBottom: 14 }}><Eyebrow>Global</Eyebrow></div>
-              <h2 className="rx-h2">Built for international business.</h2>
+              <SplitHeading>Built for international business.</SplitHeading>
               <p style={{ margin: "18px 0 0", fontSize: 16.5, lineHeight: 1.65, color: "var(--rx-text)", maxWidth: "46ch" }}>
                 Most of our clients are outside India. We invoice in your currency and settle through local bank accounts, so working with Rexin feels local wherever you are.
               </p>
@@ -583,7 +584,7 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ marginBottom: 36 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>Team</Eyebrow></div>
-            <h2 className="rx-h2">People behind the systems</h2>
+            <SplitHeading>People behind the systems</SplitHeading>
           </div>
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
             {[
@@ -624,7 +625,7 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ marginBottom: 36, maxWidth: 680 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>Backed by</Eyebrow></div>
-            <h2 className="rx-h2">In good company.</h2>
+            <SplitHeading>In good company.</SplitHeading>
             <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "56ch" }}>
               We are incubated and supported by institutions building India&apos;s deep-tech future. They back the engineering behind our path to Physical AI.
             </p>
@@ -662,7 +663,7 @@ export default function Home() {
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <div className="rx-rise" style={{ marginBottom: 36 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>FAQ</Eyebrow></div>
-            <h2 className="rx-h2">Questions, answered.</h2>
+            <SplitHeading>Questions, answered.</SplitHeading>
           </div>
           <div className="rx-faq" style={{ borderTop: "1px solid var(--rx-border)" }}>
             {faqs.map((f) => (
@@ -701,7 +702,7 @@ export default function Home() {
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
             <div className="rx-rise">
               <div style={{ marginBottom: 14 }}><Eyebrow dotColor="var(--rx-orange-400)">Contact</Eyebrow></div>
-              <h2 className="rx-h2" style={{ color: "#fff" }}>Ready when you are.</h2>
+              <SplitHeading style={{ color: "#fff" }}>Ready when you are.</SplitHeading>
               <p style={{ margin: "18px 0 30px", fontSize: 16.5, lineHeight: 1.65, color: "#cfcdc9", maxWidth: "42ch" }}>
                 A short message with context is enough to start. Wherever you are in the world, we reply fast.
               </p>
