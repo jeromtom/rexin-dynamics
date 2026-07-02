@@ -20,7 +20,14 @@ export function GlowCard({
 
   const onEnter = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== "mouse") return;
-    ref.current?.classList.add("rx-glow-on");
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    el.style.setProperty("--gx", `${x}px`);
+    el.style.setProperty("--gy", `${y}px`);
+    el.classList.add("rx-glow-on");
   };
 
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
