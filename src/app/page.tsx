@@ -7,6 +7,7 @@ import { RXIcon, type RXIconName } from "@/components/rx/RXIcon";
 import { RXButton, Eyebrow, Badge, Stat } from "@/components/rx/primitives";
 import { HeroFormation } from "@/components/rx/HeroFormation";
 import { GlobeNetwork } from "@/components/rx/GlobeNetwork";
+import { SprintTimeline } from "@/components/rx/SprintTimeline";
 
 const MAX_W = 1200;
 
@@ -49,6 +50,16 @@ const CURRENCIES: Currency[] = [
   { code: "EUR", name: "Euro", region: "the Eurozone", sym: "€", emoji: "💶" },
   { code: "INR", name: "Indian Rupee", region: "India", sym: "₹", emoji: "" },
 ];
+
+/* Where the globe flies when a currency is picked */
+const CURRENCY_FOCUS: Record<string, { lat: number; lng: number }> = {
+  USD: { lat: 40.71, lng: -74.0 },
+  CAD: { lat: 43.65, lng: -79.38 },
+  AED: { lat: 25.2, lng: 55.27 },
+  GBP: { lat: 51.51, lng: -0.13 },
+  EUR: { lat: 52.52, lng: 13.4 },
+  INR: { lat: 9.93, lng: 76.27 },
+};
 
 const engageSteps = [
   { n: "01", title: "Discovery call", body: "A short call to understand your goals, current systems and timelines. No cost, no commitment." },
@@ -123,6 +134,7 @@ export default function Home() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currency, setCurrency] = useState("USD");
+  const [pickedCurrency, setPickedCurrency] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
@@ -418,9 +430,7 @@ export default function Home() {
                 <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "#cfcdc9", maxWidth: "58ch" }}>
                   Take your idea to a working product in one week: a web app, AI agent or automation, scoped with you on day one and live in production on day seven. Fixed price, in your currency.
                 </p>
-                <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "#9C9A97" }}>
-                  D01 SCOPE&nbsp;&nbsp;<span style={{ color: "var(--rx-orange-400)" }}>{"//"}</span>&nbsp;&nbsp;D02–06 BUILD&nbsp;&nbsp;<span style={{ color: "var(--rx-orange-400)" }}>{"//"}</span>&nbsp;&nbsp;D07 LIVE
-                </div>
+                <SprintTimeline />
                 <RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton>
               </div>
             </div>
@@ -489,6 +499,19 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          <div className="rx-rise" style={{ marginTop: 14, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px 16px", padding: "16px 20px", background: "var(--rx-accent-tint)", border: "1px solid var(--rx-accent)", borderRadius: 12 }}>
+            <span className="rx-mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: "0.14em", fontWeight: 600, color: "var(--rx-accent)" }}>
+              <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-accent)" }} />
+              FAST TRACK
+            </span>
+            <span style={{ flex: 1, minWidth: 220, fontSize: 15, lineHeight: 1.55, color: "var(--rx-text)" }}>
+              In a hurry? The <strong>MVP in 7 days</strong> sprint runs this whole process in a single week: scoped on day one, live on day seven.
+            </span>
+            <a href="#services" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 14, fontWeight: 600, color: "var(--rx-accent)" }}>
+              See the sprint <RXIcon name="arrowUpRight" size={15} />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -511,7 +534,10 @@ export default function Home() {
                   return (
                     <button
                       key={c.code}
-                      onClick={() => setCurrency(c.code)}
+                      onClick={() => {
+                        setCurrency(c.code);
+                        setPickedCurrency(c.code);
+                      }}
                       className="rx-chip"
                       style={{
                         padding: "10px 15px",
@@ -547,7 +573,7 @@ export default function Home() {
                 Billed to clients in {cur.region} and settled into our {cur.code} business account. No conversion headaches on your side.
               </p>
             </div>
-            <GlobeNetwork />
+            <GlobeNetwork focus={pickedCurrency ? CURRENCY_FOCUS[pickedCurrency] : null} />
           </div>
         </div>
       </section>
