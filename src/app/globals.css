@@ -610,7 +610,34 @@
   line-height: 1.1;
   color: var(--rx-text-muted);
 }
-.rx-faq details[open] summary::after { content: "\2013"; }
+/* FAQ open/close animation (progressive enhancement; browsers without
+   ::details-content or interpolate-size just open instantly as before) */
+.rx-faq summary::after { transition: transform 0.25s ease, color 0.25s ease; }
+.rx-faq details[open] summary::after {
+  transform: rotate(45deg);
+  color: var(--rx-accent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (interpolate-size: allow-keywords) {
+    .rx-faq { interpolate-size: allow-keywords; }
+    .rx-faq details::details-content {
+      opacity: 0;
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        content-visibility 0.3s allow-discrete,
+        opacity 0.3s ease,
+        block-size 0.3s ease;
+    }
+    .rx-faq details[open]::details-content {
+      opacity: 1;
+      block-size: auto;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rx-faq summary::after { transition: none; }
+}
 
 /* Glow cards (cursor-tracking glow + tilt; Task 4 of motion pass) */
 .rx-glow-card {
