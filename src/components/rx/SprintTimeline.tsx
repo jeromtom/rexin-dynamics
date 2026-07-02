@@ -1,15 +1,17 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 const DAYS = ["D01", "D02", "D03", "D04", "D05", "D06", "D07"];
 const stageOf = (i: number) => (i === 0 ? "SCOPE" : i === 6 ? "LIVE" : "BUILD");
 
-/* Seven days as formation units lighting up in sequence.
-   Reduced motion gets the static strip instead. */
+/* Seven days as formation units lighting up in sequence. The sequence
+   starts when scrolled into view. Reduced motion gets the static strip. */
 export function SprintTimeline() {
   const [day, setDay] = useState(0);
   const [reduce, setReduce] = useState(false);
+  const [started, setStarted] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const r =
@@ -18,9 +20,31 @@ export function SprintTimeline() {
       setReduce(true);
       return;
     }
+    const el = rootRef.current;
+    if (!el || !("IntersectionObserver" in window)) {
+      setStarted(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setStarted(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!started || reduce) return;
     const id = setInterval(() => setDay((d) => (d + 1) % 7), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [started, reduce]);
 
   if (reduce) {
     return (
@@ -31,7 +55,7 @@ export function SprintTimeline() {
   }
 
   return (
-    <div style={{ width: "100%", maxWidth: 420 }}>
+    <div ref={rootRef} style={{ width: "100%", maxWidth: 420 }}>
       <div style={{ display: "flex", alignItems: "center" }}>
         {DAYS.map((d, i) => (
           <Fragment key={d}>

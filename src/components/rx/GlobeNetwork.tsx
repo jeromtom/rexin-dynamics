@@ -14,9 +14,32 @@ const CITIES = [
   { lat: -1.29, lng: 36.82 }, { lat: 6.52, lng: 3.38 }, { lat: -33.92, lng: 18.42 }, { lat: 37.57, lng: 126.98 }, { lat: 19.43, lng: -99.13 },
 ];
 
-export function GlobeNetwork({ focus }: { focus?: { lat: number; lng: number } | null }) {
+/* Interpolate along the great circle between two points (t in 0..1) */
+function gcInterp(a: { lat: number; lng: number }, b: { lat: number; lng: number }, t: number) {
+  const rad = Math.PI / 180;
+  const p1 = a.lat * rad, l1 = a.lng * rad, p2 = b.lat * rad, l2 = b.lng * rad;
+  const v1 = [Math.cos(p1) * Math.cos(l1), Math.cos(p1) * Math.sin(l1), Math.sin(p1)];
+  const v2 = [Math.cos(p2) * Math.cos(l2), Math.cos(p2) * Math.sin(l2), Math.sin(p2)];
+  const dot = Math.min(1, Math.max(-1, v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]));
+  const w = Math.acos(dot);
+  if (w < 1e-6) return { lat: a.lat, lng: a.lng };
+  const s1 = Math.sin((1 - t) * w) / Math.sin(w);
+  const s2 = Math.sin(t * w) / Math.sin(w);
+  const x = s1 * v1[0] + s2 * v2[0];
+  const y = s1 * v1[1] + s2 * v2[1];
+  const z = s1 * v1[2] + s2 * v2[2];
+  return { lat: Math.atan2(z, Math.hypot(x, y)) / rad, lng: Math.atan2(y, x) / rad };
+}
+
+export function GlobeNetwork({
+  focus,
+}: {
+  focus?: { lat: number; lng: number; emoji?: string } | null;
+}) {
   const elRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const moneyRef = useRef<HTMLSpanElement>(null);
+  const docRef = useRef<HTMLSpanElement>(null);
   const worldRef = useRef<any>(null);
   const focusTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestFocus = useRef(focus);
@@ -112,32 +135,61 @@ export function GlobeNetwork({ focus }: { focus?: { lat: number; lng: number } |
           ctr.autoRotateSpeed = 0.5;
         } catch {}
 
-        // Track the Kochi map pin against the globe surface.
+        // Track surface-anchored overlays: the Kochi pin, plus the payment /
+        // deliverable emoji flying the great circle when a region is focused.
         const pinEl = pinRef.current;
-        if (pinEl) {
-          const trackPin = () => {
-            if (cancelled || !pinEl.isConnected) return;
-            try {
+        const moneyEl = moneyRef.current;
+        const docEl = docRef.current;
+        const facingOf = (lat: number, lng: number, alt: number) => {
+          const P = world.getCoords(lat, lng, alt);
+          const C = world.camera().position;
+          const nl = Math.hypot(P.x, P.y, P.z) || 1;
+          const tx = C.x - P.x, ty = C.y - P.y, tz = C.z - P.z;
+          const tl = Math.hypot(tx, ty, tz) || 1;
+          return (P.x / nl) * (tx / tl) + (P.y / nl) * (ty / tl) + (P.z / nl) * (tz / tl);
+        };
+        const placeFlyer = (
+          flyer: HTMLElement,
+          from: { lat: number; lng: number },
+          to: { lat: number; lng: number },
+          t: number,
+        ) => {
+          const pos = gcInterp(from, to, t);
+          const alt = 0.3 * Math.sin(Math.PI * t) + 0.012;
+          const sc = world.getScreenCoords(pos.lat, pos.lng, alt);
+          if (!sc) return;
+          flyer.style.left = sc.x + "px";
+          flyer.style.top = sc.y + "px";
+          flyer.style.opacity = String(Math.min(1, Math.sin(Math.PI * t) * 4));
+          flyer.style.display = facingOf(pos.lat, pos.lng, alt) > 0.02 ? "block" : "none";
+        };
+        const FLIGHT_MS = 3400;
+        const trackOverlays = (now: number) => {
+          if (cancelled) return;
+          try {
+            if (pinEl && pinEl.isConnected) {
               const sc = world.getScreenCoords(KOCHI.lat, KOCHI.lng, 0.01);
-              const P = world.getCoords(KOCHI.lat, KOCHI.lng, 0.01);
-              const C = world.camera().position;
-              const nl = Math.hypot(P.x, P.y, P.z) || 1;
-              const tx = C.x - P.x;
-              const ty = C.y - P.y;
-              const tz = C.z - P.z;
-              const tl = Math.hypot(tx, ty, tz) || 1;
-              const facing =
-                (P.x / nl) * (tx / tl) + (P.y / nl) * (ty / tl) + (P.z / nl) * (tz / tl);
               if (sc) {
                 pinEl.style.left = sc.x + "px";
                 pinEl.style.top = sc.y + "px";
-                pinEl.style.display = facing > 0.04 ? "block" : "none";
+                pinEl.style.display = facingOf(KOCHI.lat, KOCHI.lng, 0.01) > 0.04 ? "block" : "none";
               }
-            } catch {}
-            rafId = requestAnimationFrame(trackPin);
-          };
-          rafId = requestAnimationFrame(trackPin);
-        }
+            }
+            const f = latestFocus.current;
+            if (moneyEl && docEl) {
+              if (f && !reduce) {
+                // Payment flies client region -> Kochi; deliverable flies back.
+                placeFlyer(moneyEl, f, KOCHI, (now % FLIGHT_MS) / FLIGHT_MS);
+                placeFlyer(docEl, KOCHI, f, ((now + FLIGHT_MS / 2) % FLIGHT_MS) / FLIGHT_MS);
+              } else {
+                moneyEl.style.display = "none";
+                docEl.style.display = "none";
+              }
+            }
+          } catch {}
+          rafId = requestAnimationFrame(trackOverlays);
+        };
+        rafId = requestAnimationFrame(trackOverlays);
 
         try {
           const gm = world.globeMaterial();
@@ -241,6 +293,44 @@ export function GlobeNetwork({ focus }: { focus?: { lat: number; lng: number } |
           <circle cx="12" cy="11.5" r="4.2" fill="#0A0A0B" />
         </svg>
       </div>
+      <span
+        ref={moneyRef}
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          transform: "translate(-50%,-50%)",
+          zIndex: 4,
+          pointerEvents: "none",
+          display: "none",
+          fontSize: 22,
+          lineHeight: 1,
+          filter: "drop-shadow(0 0 6px rgba(232,72,8,.55))",
+          willChange: "left,top",
+        }}
+      >
+        {focus?.emoji ?? "💸"}
+      </span>
+      <span
+        ref={docRef}
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          transform: "translate(-50%,-50%)",
+          zIndex: 4,
+          pointerEvents: "none",
+          display: "none",
+          fontSize: 20,
+          lineHeight: 1,
+          filter: "drop-shadow(0 0 6px rgba(251,106,46,.5))",
+          willChange: "left,top",
+        }}
+      >
+        📄
+      </span>
       <div
         className="rx-mono"
         style={{
