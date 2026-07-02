@@ -14,9 +14,39 @@ const CITIES = [
   { lat: -1.29, lng: 36.82 }, { lat: 6.52, lng: 3.38 }, { lat: -33.92, lng: 18.42 }, { lat: 37.57, lng: 126.98 }, { lat: 19.43, lng: -99.13 },
 ];
 
-export function GlobeNetwork() {
+export function GlobeNetwork({ focus }: { focus?: { lat: number; lng: number } | null }) {
   const elRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const worldRef = useRef<any>(null);
+  const focusTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const latestFocus = useRef(focus);
+  latestFocus.current = focus;
+
+  // Fly to the selected region (currency chips) and pulse a ring there.
+  useEffect(() => {
+    const world = worldRef.current;
+    if (!world || !focus) return;
+    const reduce =
+      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    try {
+      const ctr = world.controls();
+      ctr.autoRotate = false;
+      world.pointOfView({ lat: focus.lat, lng: focus.lng, altitude: 2.1 }, reduce ? 0 : 1100);
+      world.ringsData([
+        { lat: KOCHI.lat, lng: KOCHI.lng },
+        { lat: focus.lat, lng: focus.lng },
+      ]);
+      if (focusTimer.current) clearTimeout(focusTimer.current);
+      focusTimer.current = setTimeout(() => {
+        try {
+          world.controls().autoRotate = !reduce;
+        } catch {}
+      }, 4200);
+    } catch {}
+    return () => {
+      if (focusTimer.current) clearTimeout(focusTimer.current);
+    };
+  }, [focus]);
 
   useEffect(() => {
     const el = elRef.current;
@@ -68,9 +98,12 @@ export function GlobeNetwork() {
           .ringMaxRadius(6.5)
           .ringPropagationSpeed(3.5)
           .ringRepeatPeriod(reduce ? 1e9 : 900);
+        worldRef.current = world;
 
         try {
-          world.pointOfView({ lat: 16, lng: 74, altitude: 2.3 }, 0);
+          const f = latestFocus.current;
+          if (f) world.pointOfView({ lat: f.lat, lng: f.lng, altitude: 2.1 }, 0);
+          else world.pointOfView({ lat: 16, lng: 74, altitude: 2.3 }, 0);
         } catch {}
         try {
           const ctr = world.controls();
@@ -165,6 +198,7 @@ export function GlobeNetwork() {
 
     return () => {
       cancelled = true;
+      worldRef.current = null;
       if (rafId) cancelAnimationFrame(rafId);
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
       try {
