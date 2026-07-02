@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { RXMotion } from "@/components/rx/RXMotion";
 import { useTheme } from "@/components/theme-provider";
 import { RXIcon, type RXIconName } from "@/components/rx/RXIcon";
 import { RXButton, Eyebrow, Badge, Stat } from "@/components/rx/primitives";
@@ -210,14 +211,15 @@ export default function Home() {
   };
 
   return (
-    <div
-      className="rx-root"
-      style={{
-        fontFamily: "var(--rx-font-body)",
-        background: "var(--rx-bg)",
-        color: "var(--rx-text)",
-        minHeight: "100vh",
-      }}
+    <RXMotion>
+      <div
+        className="rx-root"
+        style={{
+          fontFamily: "var(--rx-font-body)",
+          background: "var(--rx-bg)",
+          color: "var(--rx-text)",
+          minHeight: "100vh",
+        }}
     >
       {/* ===== Header ===== */}
       <header
@@ -815,6 +817,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </RXMotion>
   );
 }
