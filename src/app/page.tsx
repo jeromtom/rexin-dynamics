@@ -11,6 +11,7 @@ import { GlobeNetwork } from "@/components/rx/GlobeNetwork";
 import { SprintTimeline } from "@/components/rx/SprintTimeline";
 import { SplitHeading } from "@/components/rx/SplitHeading";
 import { ParallaxMotif } from "@/components/rx/ParallaxMotif";
+import { GlowCard } from "@/components/rx/GlowCard";
 
 const MAX_W = 1200;
 
@@ -421,7 +422,7 @@ export default function Home() {
             }}
           >
             {aiServices.map((card) => (
-              <div key={card.title} className="rx-service-card">
+              <GlowCard key={card.title} className="rx-service-card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
                     <RXIcon name={card.icon} size={22} />
@@ -430,7 +431,7 @@ export default function Home() {
                 </div>
                 <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 21, margin: "6px 0 0", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{card.title}</h3>
                 <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{card.body}</p>
-              </div>
+              </GlowCard>
             ))}
           </div>
 
@@ -451,7 +452,7 @@ export default function Home() {
             }}
           >
             {airServices.map((card) => (
-              <div key={card.title} className="rx-service-card">
+              <GlowCard key={card.title} className="rx-service-card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
                     <RXIcon name={card.icon} size={22} />
@@ -460,7 +461,7 @@ export default function Home() {
                 </div>
                 <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 21, margin: "6px 0 0", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{card.title}</h3>
                 <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{card.body}</p>
-              </div>
+              </GlowCard>
             ))}
           </div>
         </div>
@@ -590,7 +591,7 @@ export default function Home() {
               { name: "Jerom Tom", role: "CEO · FOUNDER", desc: "Leads the vision and strategy.", img: "/team-jerom.png", email: "jerom@rexindynamics.com", linkedin: "https://linkedin.com/in/jeromtom" },
               { name: "Junaid CK", role: "CTO · FOUNDER", desc: "Develops the software and flight systems.", img: "/team-junaid.png", email: "junaid@rexindynamics.com", linkedin: "https://www.linkedin.com/in/junaid-c-k/" },
             ].map((m, i) => (
-              <div key={m.name} className="rx-rise rx-team-card" style={{ animationDelay: i ? "0.07s" : undefined, background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
+              <GlowCard key={m.name} className="rx-rise rx-team-card" style={{ animationDelay: i ? "0.07s" : undefined, background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
                 <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={m.img} alt={`${m.name}, ${m.role.split(" · ")[0]} of Rexin Dynamics`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -613,7 +614,7 @@ export default function Home() {
                     </a>
                   </div>
                 </div>
-              </div>
+              </GlowCard>
             ))}
           </div>
         </div>
