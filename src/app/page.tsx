@@ -51,14 +51,15 @@ const CURRENCIES: Currency[] = [
   { code: "INR", name: "Indian Rupee", region: "India", sym: "₹", emoji: "" },
 ];
 
-/* Where the globe flies when a currency is picked */
+/* Where the globe flies when a currency is picked (INR uses Delhi so the
+   payment arc to Kochi stays visible) */
 const CURRENCY_FOCUS: Record<string, { lat: number; lng: number }> = {
   USD: { lat: 40.71, lng: -74.0 },
   CAD: { lat: 43.65, lng: -79.38 },
   AED: { lat: 25.2, lng: 55.27 },
   GBP: { lat: 51.51, lng: -0.13 },
   EUR: { lat: 52.52, lng: 13.4 },
-  INR: { lat: 9.93, lng: 76.27 },
+  INR: { lat: 28.61, lng: 77.21 },
 };
 
 const engageSteps = [
@@ -320,7 +321,7 @@ export default function Home() {
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto", padding: "24px var(--rx-section-x) 78px" }}>
           <div className="rx-mono" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, paddingBottom: 24, borderBottom: "1px solid #1a1a1d", fontSize: 11, letterSpacing: "0.12em", color: "#6E6961", flexWrap: "wrap" }}>
             <span>REXIN&nbsp;DYNAMICS&nbsp;&nbsp;<span style={{ color: "#9C9A97" }}>{"//"}</span>&nbsp;&nbsp;KOCHI, KERALA · INDIA</span>
-            <a href="#services" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--rx-orange-400)", textDecoration: "none" }}>
+            <a href="#process" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--rx-orange-400)", textDecoration: "none" }}>
               <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
               NEW&nbsp;{"//"}&nbsp;MVP IN 7 DAYS
             </a>
@@ -416,24 +417,6 @@ export default function Home() {
               overflow: "hidden",
             }}
           >
-            <div className="rx-night rx-mvp-card" style={{ gridColumn: "1 / -1", position: "relative", overflow: "hidden", background: "#0A0A0B", padding: "34px 30px" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden className="rx-drift" style={{ position: "absolute", inset: "-30% -6% auto -6%", width: "112%", opacity: 0.4, pointerEvents: "none" }} />
-              <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
-                <span className="rx-mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-orange-400)" }}>
-                  <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
-                  FLAGSHIP {"//"} 7-DAY SPRINT
-                </span>
-                <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 900, fontSize: "clamp(28px,3.6vw,40px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: 0, color: "#fff" }}>
-                  MVP in 7 days.
-                </h3>
-                <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "#cfcdc9", maxWidth: "58ch" }}>
-                  Take your idea to a working product in one week: a web app, AI agent or automation, scoped with you on day one and live in production on day seven. Fixed price, in your currency.
-                </p>
-                <SprintTimeline />
-                <RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton>
-              </div>
-            </div>
             {aiServices.map((card) => (
               <div key={card.title} className="rx-service-card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -500,17 +483,23 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="rx-rise" style={{ marginTop: 14, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px 16px", padding: "16px 20px", background: "var(--rx-accent-tint)", border: "1px solid var(--rx-accent)", borderRadius: 12 }}>
-            <span className="rx-mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: "0.14em", fontWeight: 600, color: "var(--rx-accent)" }}>
-              <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-accent)" }} />
-              FAST TRACK
-            </span>
-            <span style={{ flex: 1, minWidth: 220, fontSize: 15, lineHeight: 1.55, color: "var(--rx-text)" }}>
-              In a hurry? The <strong>MVP in 7 days</strong> sprint runs this whole process in a single week: scoped on day one, live on day seven.
-            </span>
-            <a href="#services" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 14, fontWeight: 600, color: "var(--rx-accent)" }}>
-              See the sprint <RXIcon name="arrowUpRight" size={15} />
-            </a>
+          <div className="rx-rise rx-night rx-mvp-card" style={{ marginTop: 18, position: "relative", overflow: "hidden", background: "#0A0A0B", border: "1px solid var(--rx-border)", borderRadius: 14, padding: "34px 30px" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden className="rx-drift" style={{ position: "absolute", inset: "-30% -6% auto -6%", width: "112%", opacity: 0.4, pointerEvents: "none" }} />
+            <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
+              <span className="rx-mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-orange-400)" }}>
+                <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
+                FAST TRACK {"//"} 7-DAY SPRINT
+              </span>
+              <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 900, fontSize: "clamp(28px,3.6vw,40px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: 0, color: "#fff" }}>
+                MVP in 7 days.
+              </h3>
+              <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "#cfcdc9", maxWidth: "58ch" }}>
+                In a hurry? This whole process runs in a single week: a web app, AI agent or automation, scoped with you on day one and live in production on day seven. Fixed price, in your currency.
+              </p>
+              <SprintTimeline />
+              <RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton>
+            </div>
           </div>
         </div>
       </section>
@@ -573,7 +562,16 @@ export default function Home() {
                 Billed to clients in {cur.region} and settled into our {cur.code} business account. No conversion headaches on your side.
               </p>
             </div>
-            <GlobeNetwork focus={pickedCurrency ? CURRENCY_FOCUS[pickedCurrency] : null} />
+            <GlobeNetwork
+              focus={
+                pickedCurrency
+                  ? {
+                      ...CURRENCY_FOCUS[pickedCurrency],
+                      emoji: CURRENCIES.find((c) => c.code === pickedCurrency)?.emoji || "💸",
+                    }
+                  : null
+              }
+            />
           </div>
         </div>
       </section>
