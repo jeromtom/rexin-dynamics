@@ -12,6 +12,7 @@ import { SprintTimeline } from "@/components/rx/SprintTimeline";
 import { SplitHeading } from "@/components/rx/SplitHeading";
 import { ParallaxMotif } from "@/components/rx/ParallaxMotif";
 import { GlowCard } from "@/components/rx/GlowCard";
+import { EngageSequence } from "@/components/rx/EngageSequence";
 
 const MAX_W = 1200;
 
@@ -477,14 +478,8 @@ export default function Home() {
               A simple process built for international clients: clear scope, a fixed quote in your currency, and delivery you can track.
             </p>
           </div>
-          <div className="rx-rise rx-stack" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 1, background: "var(--rx-border)", border: "1px solid var(--rx-border)", borderRadius: 14, overflow: "hidden" }}>
-            {engageSteps.map((s) => (
-              <div key={s.n} style={{ background: "var(--rx-surface)", padding: "26px 24px" }}>
-                <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.1em", color: "var(--rx-accent)", marginBottom: 12 }}>{s.n}</div>
-                <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 18, margin: "0 0 8px", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{s.title}</h3>
-                <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{s.body}</p>
-              </div>
-            ))}
+          <div className="rx-rise">
+            <EngageSequence steps={engageSteps} />
           </div>
 
           <div className="rx-rise rx-night rx-mvp-card" style={{ marginTop: 18, position: "relative", overflow: "hidden", background: "#0A0A0B", border: "1px solid var(--rx-border)", borderRadius: 14, padding: "34px 30px" }}>
