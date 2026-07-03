@@ -46,9 +46,11 @@ const TZ_TO_COUNTRY: Record<string, string> = {
   "America/New_York": "US", "America/Chicago": "US", "America/Denver": "US",
   "America/Phoenix": "US", "America/Los_Angeles": "US", "America/Anchorage": "US",
   "America/Detroit": "US", "Pacific/Honolulu": "US",
+  "America/Indiana/Indianapolis": "US", "America/Boise": "US", "America/Kentucky/Louisville": "US",
   // Canada
   "America/Toronto": "CA", "America/Vancouver": "CA", "America/Edmonton": "CA",
   "America/Winnipeg": "CA", "America/Halifax": "CA", "America/St_Johns": "CA",
+  "America/Regina": "CA", "America/Whitehorse": "CA",
   // UAE, UK, India
   "Asia/Dubai": "AE",
   "Europe/London": "GB",
@@ -56,6 +58,7 @@ const TZ_TO_COUNTRY: Record<string, string> = {
   // Australia, Singapore, New Zealand, Switzerland
   "Australia/Sydney": "AU", "Australia/Melbourne": "AU", "Australia/Brisbane": "AU",
   "Australia/Perth": "AU", "Australia/Adelaide": "AU", "Australia/Hobart": "AU",
+  "Australia/Darwin": "AU",
   "Asia/Singapore": "SG",
   "Pacific/Auckland": "NZ",
   "Europe/Zurich": "CH",
@@ -67,6 +70,8 @@ const TZ_TO_COUNTRY: Record<string, string> = {
   "Europe/Vilnius": "LT", "Europe/Luxembourg": "LU", "Europe/Malta": "MT",
   "Europe/Amsterdam": "NL", "Europe/Lisbon": "PT", "Europe/Bratislava": "SK",
   "Europe/Ljubljana": "SI", "Europe/Madrid": "ES",
+  "Atlantic/Madeira": "PT", "Atlantic/Azores": "PT",
+  "Asia/Famagusta": "CY",
 };
 
 function countryFromTimezone(): string | null {
