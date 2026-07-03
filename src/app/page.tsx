@@ -2,12 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { RXMotion } from "@/components/rx/RXMotion";
+import { Magnetic } from "@/components/rx/Magnetic";
 import { useTheme } from "@/components/theme-provider";
 import { RXIcon, type RXIconName } from "@/components/rx/RXIcon";
 import { RXButton, Eyebrow, Badge, Stat } from "@/components/rx/primitives";
 import { HeroFormation } from "@/components/rx/HeroFormation";
 import { GlobeNetwork } from "@/components/rx/GlobeNetwork";
 import { SprintTimeline } from "@/components/rx/SprintTimeline";
+import { SplitHeading } from "@/components/rx/SplitHeading";
+import { ParallaxMotif } from "@/components/rx/ParallaxMotif";
+import { GlowCard } from "@/components/rx/GlowCard";
+import { EngageSequence } from "@/components/rx/EngageSequence";
 
 const MAX_W = 1200;
 
@@ -210,14 +216,15 @@ export default function Home() {
   };
 
   return (
-    <div
-      className="rx-root"
-      style={{
-        fontFamily: "var(--rx-font-body)",
-        background: "var(--rx-bg)",
-        color: "var(--rx-text)",
-        minHeight: "100vh",
-      }}
+    <RXMotion>
+      <div
+        className="rx-root"
+        style={{
+          fontFamily: "var(--rx-font-body)",
+          background: "var(--rx-bg)",
+          color: "var(--rx-text)",
+          minHeight: "100vh",
+        }}
     >
       {/* ===== Header ===== */}
       <header
@@ -260,9 +267,11 @@ export default function Home() {
             >
               <RXIcon name={isNight ? "sun" : "moon"} size={18} />
             </button>
-            <RXButton variant="solid" size="sm" href="#contact" className="rx-hide-sm">
-              Get in touch
-            </RXButton>
+            <Magnetic className="rx-hide-sm">
+              <RXButton variant="solid" size="sm" href="#contact">
+                Get in touch
+              </RXButton>
+            </Magnetic>
             <button
               onClick={() => setMenuOpen((o) => !o)}
               className="rx-icon-btn rx-show-sm"
@@ -341,7 +350,7 @@ export default function Home() {
                 Rexin Dynamics builds AI automation, websites, and voice and WhatsApp agents for businesses around the world. We put the proceeds into a harder mission: autonomous drones and the agentic AI behind them. Engineered in Kerala, delivered globally.
               </p>
               <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
-                <RXButton variant="solid" size="lg" href="#contact">Get in touch</RXButton>
+                <Magnetic><RXButton variant="solid" size="lg" href="#contact">Get in touch</RXButton></Magnetic>
                 <RXButton variant="outline" size="lg" href="#services">View services</RXButton>
               </div>
             </div>
@@ -366,7 +375,7 @@ export default function Home() {
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: ".92fr 1.08fr", gap: 56, alignItems: "center" }}>
             <div className="rx-rise">
               <div style={{ marginBottom: 14 }}><Eyebrow>About</Eyebrow></div>
-              <h2 className="rx-h2">We ship AI for the world. We fund robotics for the future.</h2>
+              <SplitHeading>We ship AI for the world. We fund robotics for the future.</SplitHeading>
               <p style={{ margin: "20px 0 0", fontSize: 16.5, lineHeight: 1.65, color: "var(--rx-text)" }}>
                 Rexin Dynamics is an engineering-led studio in Kochi, Kerala. For companies around the world we design and ship AI automation, websites, and voice and WhatsApp agents that go straight into production.
               </p>
@@ -380,8 +389,7 @@ export default function Home() {
             </div>
             <div className="rx-rise" style={{ animationDelay: "0.08s", position: "relative", borderRadius: 14, overflow: "hidden", border: "1px solid var(--rx-border)" }}>
               <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#070708" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden className="rx-drift" style={{ position: "absolute", inset: "-10% -4% auto -4%", width: "108%", opacity: 0.85 }} />
+                <ParallaxMotif strength={36} style={{ position: "absolute", inset: "-10% -4% auto -4%", width: "108%", opacity: 0.85 }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(232,72,8,.16), transparent 55%)" }} />
                 <span className="rx-mono" style={{ position: "absolute", bottom: 14, left: 14, fontSize: 10.5, letterSpacing: "0.12em", color: "rgba(255,255,255,.82)" }}>LAB // KOCHI · R&D</span>
               </div>
@@ -395,7 +403,7 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ maxWidth: 680 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>What we do</Eyebrow></div>
-            <h2 className="rx-h2">Two engines, one company.</h2>
+            <SplitHeading>Two engines, one company.</SplitHeading>
             <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "54ch" }}>
               AI and software pay the bills today. Aerial robotics is where we are headed. Both run on the same engineering discipline.
             </p>
@@ -418,7 +426,7 @@ export default function Home() {
             }}
           >
             {aiServices.map((card) => (
-              <div key={card.title} className="rx-service-card">
+              <GlowCard key={card.title} className="rx-service-card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
                     <RXIcon name={card.icon} size={22} />
@@ -427,7 +435,7 @@ export default function Home() {
                 </div>
                 <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 21, margin: "6px 0 0", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{card.title}</h3>
                 <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{card.body}</p>
-              </div>
+              </GlowCard>
             ))}
           </div>
 
@@ -448,7 +456,7 @@ export default function Home() {
             }}
           >
             {airServices.map((card) => (
-              <div key={card.title} className="rx-service-card">
+              <GlowCard key={card.title} className="rx-service-card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
                     <RXIcon name={card.icon} size={22} />
@@ -457,7 +465,7 @@ export default function Home() {
                 </div>
                 <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 21, margin: "6px 0 0", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{card.title}</h3>
                 <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{card.body}</p>
-              </div>
+              </GlowCard>
             ))}
           </div>
         </div>
@@ -468,19 +476,13 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ maxWidth: 680, marginBottom: 32 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>How we engage</Eyebrow></div>
-            <h2 className="rx-h2">From first call to production.</h2>
+            <SplitHeading>From first call to production.</SplitHeading>
             <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "56ch" }}>
               A simple process built for international clients: clear scope, a fixed quote in your currency, and delivery you can track.
             </p>
           </div>
-          <div className="rx-rise rx-stack" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 1, background: "var(--rx-border)", border: "1px solid var(--rx-border)", borderRadius: 14, overflow: "hidden" }}>
-            {engageSteps.map((s) => (
-              <div key={s.n} style={{ background: "var(--rx-surface)", padding: "26px 24px" }}>
-                <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.1em", color: "var(--rx-accent)", marginBottom: 12 }}>{s.n}</div>
-                <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 18, margin: "0 0 8px", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{s.title}</h3>
-                <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{s.body}</p>
-              </div>
-            ))}
+          <div className="rx-rise">
+            <EngageSequence steps={engageSteps} />
           </div>
 
           <div className="rx-rise rx-night rx-mvp-card" style={{ marginTop: 18, position: "relative", overflow: "hidden", background: "#0A0A0B", border: "1px solid var(--rx-border)", borderRadius: 14, padding: "34px 30px" }}>
@@ -498,7 +500,7 @@ export default function Home() {
                 In a hurry? This whole process runs in a single week: a web app, AI agent or automation, scoped with you on day one and live in production on day seven. Fixed price, in your currency.
               </p>
               <SprintTimeline />
-              <RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton>
+              <Magnetic><RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton></Magnetic>
             </div>
           </div>
         </div>
@@ -506,13 +508,12 @@ export default function Home() {
 
       {/* ===== Global ===== */}
       <section id="global" style={{ position: "relative", overflow: "hidden", padding: sectionPad, borderTop: "1px solid var(--rx-border)" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden style={{ position: "absolute", inset: "-20% 0 auto 0", width: "100%", opacity: 0.1, pointerEvents: "none" }} />
+        <ParallaxMotif strength={80} style={{ position: "absolute", inset: "-20% 0 auto 0", width: "100%", opacity: 0.1, pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
             <div className="rx-rise">
               <div style={{ marginBottom: 14 }}><Eyebrow>Global</Eyebrow></div>
-              <h2 className="rx-h2">Built for international business.</h2>
+              <SplitHeading>Built for international business.</SplitHeading>
               <p style={{ margin: "18px 0 0", fontSize: 16.5, lineHeight: 1.65, color: "var(--rx-text)", maxWidth: "46ch" }}>
                 Most of our clients are outside India. We invoice in your currency and settle through local bank accounts, so working with Rexin feels local wherever you are.
               </p>
@@ -581,36 +582,38 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ marginBottom: 36 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>Team</Eyebrow></div>
-            <h2 className="rx-h2">People behind the systems</h2>
+            <SplitHeading>People behind the systems</SplitHeading>
           </div>
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
             {[
               { name: "Jerom Tom", role: "CEO · FOUNDER", desc: "Leads the vision and strategy.", img: "/team-jerom.png", email: "jerom@rexindynamics.com", linkedin: "https://linkedin.com/in/jeromtom" },
               { name: "Junaid CK", role: "CTO · FOUNDER", desc: "Develops the software and flight systems.", img: "/team-junaid.png", email: "junaid@rexindynamics.com", linkedin: "https://www.linkedin.com/in/junaid-c-k/" },
             ].map((m, i) => (
-              <div key={m.name} className="rx-rise rx-team-card" style={{ animationDelay: i ? "0.07s" : undefined, background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
-                <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={m.img} alt={`${m.name}, ${m.role.split(" · ")[0]} of Rexin Dynamics`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                </div>
-                <div>
-                  <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>{m.role}</div>
-                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>{m.name}</h3>
-                  <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>{m.desc}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
-                    <a href={`mailto:${m.email}`} className="rx-mono" style={{ fontSize: 12, color: "var(--rx-text-muted)" }}>{m.email}</a>
-                    <a
-                      href={m.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rx-mono"
-                      aria-label={`${m.name} on LinkedIn`}
-                      style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, color: "var(--rx-accent)" }}
-                    >
-                      LINKEDIN <RXIcon name="arrowUpRight" size={13} />
-                    </a>
+              <div key={m.name} className="rx-rise" style={{ animationDelay: i ? "0.07s" : undefined }}>
+                <GlowCard className="rx-team-card" style={{ background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
+                  <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={m.img} alt={`${m.name}, ${m.role.split(" · ")[0]} of Rexin Dynamics`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
-                </div>
+                  <div>
+                    <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>{m.role}</div>
+                    <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>{m.name}</h3>
+                    <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>{m.desc}</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
+                      <a href={`mailto:${m.email}`} className="rx-mono" style={{ fontSize: 12, color: "var(--rx-text-muted)" }}>{m.email}</a>
+                      <a
+                        href={m.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rx-mono"
+                        aria-label={`${m.name} on LinkedIn`}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, color: "var(--rx-accent)" }}
+                      >
+                        LINKEDIN <RXIcon name="arrowUpRight" size={13} />
+                      </a>
+                    </div>
+                  </div>
+                </GlowCard>
               </div>
             ))}
           </div>
@@ -622,7 +625,7 @@ export default function Home() {
         <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-rise" style={{ marginBottom: 36, maxWidth: 680 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>Backed by</Eyebrow></div>
-            <h2 className="rx-h2">In good company.</h2>
+            <SplitHeading>In good company.</SplitHeading>
             <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "56ch" }}>
               We are incubated and supported by institutions building India&apos;s deep-tech future. They back the engineering behind our path to Physical AI.
             </p>
@@ -660,7 +663,7 @@ export default function Home() {
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <div className="rx-rise" style={{ marginBottom: 36 }}>
             <div style={{ marginBottom: 14 }}><Eyebrow>FAQ</Eyebrow></div>
-            <h2 className="rx-h2">Questions, answered.</h2>
+            <SplitHeading>Questions, answered.</SplitHeading>
           </div>
           <div className="rx-faq" style={{ borderTop: "1px solid var(--rx-border)" }}>
             {faqs.map((f) => (
@@ -693,13 +696,12 @@ export default function Home() {
 
       {/* ===== Contact (always night) ===== */}
       <section id="contact" className="rx-night" style={{ position: "relative", overflow: "hidden", padding: sectionPad, borderTop: "1px solid #1f1f22", background: "#0A0A0B", color: "#fff" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden style={{ position: "absolute", inset: "auto 0 -30% 0", width: "100%", opacity: 0.16, pointerEvents: "none" }} />
+        <ParallaxMotif strength={80} style={{ position: "absolute", inset: "auto 0 -30% 0", width: "100%", opacity: 0.16, pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto" }}>
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
             <div className="rx-rise">
               <div style={{ marginBottom: 14 }}><Eyebrow dotColor="var(--rx-orange-400)">Contact</Eyebrow></div>
-              <h2 className="rx-h2" style={{ color: "#fff" }}>Ready when you are.</h2>
+              <SplitHeading style={{ color: "#fff" }}>Ready when you are.</SplitHeading>
               <p style={{ margin: "18px 0 30px", fontSize: 16.5, lineHeight: 1.65, color: "#cfcdc9", maxWidth: "42ch" }}>
                 A short message with context is enough to start. Wherever you are in the world, we reply fast.
               </p>
@@ -772,8 +774,7 @@ export default function Home() {
 
       {/* ===== Footer (always night) ===== */}
       <footer className="rx-night" style={{ position: "relative", overflow: "hidden", borderTop: "1px solid #1f1f22", background: "#0A0A0B", color: "#fff" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden style={{ position: "absolute", top: 0, left: 0, width: "100%", opacity: 0.28, pointerEvents: "none" }} />
+        <ParallaxMotif strength={50} style={{ position: "absolute", top: 0, left: 0, width: "100%", opacity: 0.28, pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto", padding: "64px var(--rx-section-x) 36px" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 48, justifyContent: "space-between" }}>
             <div style={{ maxWidth: 300 }}>
@@ -815,6 +816,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </RXMotion>
   );
 }
