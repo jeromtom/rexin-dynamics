@@ -665,6 +665,16 @@
   .rx-glow-card::after { display: none; }
 }
 
+/* Parallax motif images (Task 2b hydration fix): the scroll-linked `y`
+   transform is always rendered by ParallaxMotif.tsx, in both SSR and CSR,
+   so server/client output stays identical (no hydration mismatch). This
+   rule then neutralizes the transform for reduced-motion users at the
+   paint layer, before hydration runs, so the motifs are static with no
+   flash of movement. */
+@media (prefers-reduced-motion: reduce) {
+  .rx-parallax-motif { transform: none !important; }
+}
+
 /* Engage sequence pin (Task 5 of motion pass): layout via media queries so
    first paint matches hydrated layout (no post-hydration shift) */
 .rx-engage-track { height: auto; }

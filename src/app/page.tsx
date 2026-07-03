@@ -275,7 +275,7 @@ export default function Home() {
           color: "var(--rx-text)",
           minHeight: "100vh",
         }}
-    >
+      >
       {/* ===== Header ===== */}
       <header
         style={{
