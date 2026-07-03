@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { CURRENCY_FOCUS } from "@/lib/geo";
+import { CURRENCY_FOCUS, detectCountry, currencyForCountry, focusForCountry } from "@/lib/geo";
 import { RXMotion } from "@/components/rx/RXMotion";
 import { Magnetic } from "@/components/rx/Magnetic";
 import { useTheme } from "@/components/theme-provider";
@@ -140,6 +140,9 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const bloomRef = useRef<HTMLDivElement>(null);
+  const [detected, setDetected] = useState<{ currency: string; lat: number; lng: number } | null>(null);
+  const [globalSeen, setGlobalSeen] = useState(false);
+  const userPickedCurrency = useRef(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -191,10 +194,63 @@ export default function Home() {
     };
   }, []);
 
+  // Preselect the visitor's invoice currency from their country; the
+  // globe flight waits until the Global section is on screen.
+  useEffect(() => {
+    let stale = false;
+    detectCountry().then((cc) => {
+      if (stale || !cc || userPickedCurrency.current) return;
+      const cur = currencyForCountry(cc);
+      if (!cur) return;
+      const pos = focusForCountry(cc, cur);
+      if (!pos) return;
+      setCurrency(cur);
+      setDetected({ currency: cur, ...pos });
+    });
+    return () => {
+      stale = true;
+    };
+  }, []);
+
+  // Fire the auto flight only once the visitor can see the globe.
+  useEffect(() => {
+    const el = document.getElementById("global");
+    if (!el || !("IntersectionObserver" in window)) {
+      setGlobalSeen(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setGlobalSeen(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const isNight = mounted && resolvedTheme === "dark";
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
   const cur = CURRENCIES.find((c) => c.code === currency) ?? CURRENCIES[0];
+
+  const globeFocus = pickedCurrency
+    ? {
+        ...CURRENCY_FOCUS[pickedCurrency],
+        emoji: CURRENCIES.find((c) => c.code === pickedCurrency)?.emoji || "💸",
+      }
+    : detected && globalSeen
+      ? {
+          lat: detected.lat,
+          lng: detected.lng,
+          emoji: CURRENCIES.find((c) => c.code === detected.currency)?.emoji || "💸",
+        }
+      : null;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -519,6 +575,7 @@ export default function Home() {
                     <button
                       key={c.code}
                       onClick={() => {
+                        userPickedCurrency.current = true;
                         setCurrency(c.code);
                         setPickedCurrency(c.code);
                       }}
@@ -557,16 +614,7 @@ export default function Home() {
                 Billed to clients in {cur.region} and settled into our {cur.code} business account. No conversion headaches on your side.
               </p>
             </div>
-            <GlobeNetwork
-              focus={
-                pickedCurrency
-                  ? {
-                      ...CURRENCY_FOCUS[pickedCurrency],
-                      emoji: CURRENCIES.find((c) => c.code === pickedCurrency)?.emoji || "💸",
-                    }
-                  : null
-              }
-            />
+            <GlobeNetwork focus={globeFocus} />
           </div>
         </div>
       </section>
