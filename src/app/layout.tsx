@@ -110,8 +110,12 @@ const organizationJsonLd = {
     "United Kingdom",
     "European Union",
     "India",
+    "Australia",
+    "Singapore",
+    "New Zealand",
+    "Switzerland",
   ],
-  currenciesAccepted: "USD, CAD, AED, GBP, EUR, INR",
+  currenciesAccepted: "USD, CAD, AED, GBP, EUR, INR, AUD, SGD, NZD, CHF",
   knowsAbout: [
     "AI automation",
     "Agentic AI",
