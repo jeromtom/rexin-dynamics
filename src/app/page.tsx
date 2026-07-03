@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { CURRENCY_FOCUS } from "@/lib/geo";
 import { RXMotion } from "@/components/rx/RXMotion";
 import { Magnetic } from "@/components/rx/Magnetic";
 import { useTheme } from "@/components/theme-provider";
@@ -29,7 +30,7 @@ const heroStats = [
   { idx: "01", value: "100", unit: "+", label: "projects shipped" },
   { idx: "02", value: "50", unit: "+", label: "clients & partners" },
   { idx: "03", value: "24/7", unit: "", label: "support in your timezone" },
-  { idx: "04", value: "5", unit: "+", label: "currencies billed" },
+  { idx: "04", value: "10", unit: "", label: "currencies billed" },
 ];
 
 type ServiceCard = { icon: RXIconName; tag: string; title: string; body: string };
@@ -55,18 +56,11 @@ const CURRENCIES: Currency[] = [
   { code: "GBP", name: "Pound Sterling", region: "the United Kingdom", sym: "£", emoji: "💷" },
   { code: "EUR", name: "Euro", region: "the Eurozone", sym: "€", emoji: "💶" },
   { code: "INR", name: "Indian Rupee", region: "India", sym: "₹", emoji: "" },
+  { code: "AUD", name: "Australian Dollar", region: "Australia", sym: "A$", emoji: "💵" },
+  { code: "SGD", name: "Singapore Dollar", region: "Singapore", sym: "S$", emoji: "💵" },
+  { code: "NZD", name: "New Zealand Dollar", region: "New Zealand", sym: "NZ$", emoji: "💵" },
+  { code: "CHF", name: "Swiss Franc", region: "Switzerland", sym: "", emoji: "" },
 ];
-
-/* Where the globe flies when a currency is picked (INR uses Delhi so the
-   payment arc to Kochi stays visible) */
-const CURRENCY_FOCUS: Record<string, { lat: number; lng: number }> = {
-  USD: { lat: 40.71, lng: -74.0 },
-  CAD: { lat: 43.65, lng: -79.38 },
-  AED: { lat: 25.2, lng: 55.27 },
-  GBP: { lat: 51.51, lng: -0.13 },
-  EUR: { lat: 52.52, lng: 13.4 },
-  INR: { lat: 28.61, lng: 77.21 },
-};
 
 const engageSteps = [
   { n: "01", title: "Discovery call", body: "A short call to understand your goals, current systems and timelines. No cost, no commitment." },
@@ -96,7 +90,7 @@ const faqs = [
   },
   {
     q: "Do you work with clients outside India?",
-    a: "Yes. Most of our clients are international. We invoice in USD, CAD, AED, GBP, EUR and INR and settle through local bank accounts, so working with us feels local wherever you are.",
+    a: "Yes. Most of our clients are international. We invoice in USD, CAD, AED, GBP, EUR, INR, AUD, SGD, NZD and CHF and settle through local bank accounts, so working with us feels local wherever you are.",
   },
   {
     q: "Can international clients contract with Rexin Dynamics directly?",
