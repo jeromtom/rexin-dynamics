@@ -4,7 +4,7 @@
 const worker = {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname === "/api/geo") {
+    if (url.pathname === "/api/geo" || url.pathname === "/api/geo/") {
       if (request.method !== "GET") return new Response(null, { status: 405 });
       const country = request.cf?.country ?? null;
       return new Response(JSON.stringify({ country }), {
