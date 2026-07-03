@@ -1,7 +1,9 @@
 {
 	"name": "rexin-dynamics",
 	"compatibility_date": "2024-09-10",
+	"main": "worker/index.js",
 	"assets": {
-		"directory": "./out"
+		"directory": "./out",
+		"binding": "ASSETS"
 	}
 }
