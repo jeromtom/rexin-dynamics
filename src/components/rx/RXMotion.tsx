@@ -1,13 +1,13 @@
 "use client";
 
-import { LazyMotion } from "motion/react";
+import { LazyMotion, domAnimation } from "motion/react";
 import type { ReactNode } from "react";
 
-/* domAnimation is loaded on demand (see src/lib/motion-features.ts);
-   `strict` still guarantees only lightweight `m` components are used. */
+/* Loads motion's dom-animation feature bundle lazily; `strict` guarantees
+   only the lightweight `m` components are used site-wide. */
 export function RXMotion({ children }: { children: ReactNode }) {
   return (
-    <LazyMotion features={() => import("@/lib/motion-features").then((m) => m.default)} strict>
+    <LazyMotion features={domAnimation} strict>
       {children}
     </LazyMotion>
   );
