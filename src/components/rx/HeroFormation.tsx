@@ -13,28 +13,40 @@ const CHIPS: { key: Formation; label: string }[] = [
 ];
 const N = 36;
 
+// Round to 4 decimal places. Percentage values computed from Math.cos/Math.sin
+// carry 15+ significant digits, but CSS percentage/length values are stored
+// internally by the browser as 32-bit floats, so the server-rendered HTML
+// string gets down-cast to ~6 significant digits when parsed. Without this
+// rounding, React's client-side render recomputes the full-precision string,
+// which no longer matches what the DOM reports post-parse, causing a
+// hydration mismatch on every load (see task-2-report.md for evidence).
+// Rounding here makes the server and client strings identical.
+function round4(n: number): number {
+  return Math.round(n * 10000) / 10000;
+}
+
 function pos(i: number, f: Formation): [number, number] {
   const t = i / N;
   if (f === "grid") {
     const cols = 6;
     const c = i % cols;
     const r = Math.floor(i / cols);
-    return [18 + c * 12.8, 14 + r * 13.6];
+    return [round4(18 + c * 12.8), round4(14 + r * 13.6)];
   }
   if (f === "arrow") {
     const half = Math.floor(N / 2);
     if (i < half) {
       const u = i / (half - 1);
-      return [22 + u * 54, 16 + u * 34];
+      return [round4(22 + u * 54), round4(16 + u * 34)];
     }
     const u2 = (i - half) / (N - half - 1);
-    return [22 + u2 * 54, 84 - u2 * 34];
+    return [round4(22 + u2 * 54), round4(84 - u2 * 34)];
   }
   if (f === "wave") {
-    return [8 + t * 84, 50 + 24 * Math.sin(t * Math.PI * 4)];
+    return [round4(8 + t * 84), round4(50 + 24 * Math.sin(t * Math.PI * 4))];
   }
   const a = t * Math.PI * 2;
-  return [50 + 38 * Math.cos(a), 50 + 38 * Math.sin(a)];
+  return [round4(50 + 38 * Math.cos(a)), round4(50 + 38 * Math.sin(a))];
 }
 
 const cornerBase: React.CSSProperties = { position: "absolute", width: 22, height: 22 };
