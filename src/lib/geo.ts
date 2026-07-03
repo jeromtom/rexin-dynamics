@@ -83,19 +83,24 @@ function countryFromTimezone(): string | null {
   }
 }
 
-/* Cloudflare serves /cdn-cgi/trace on the production domain; the `loc=`
-   line is the visitor's country. 3s timeout so slow networks never
+/* The site's own Worker reports the country Cloudflare attaches to the
+   request (see worker/index.js). Unavailable under `next dev`, where the
+   timezone fallback below takes over. 3s timeout so slow networks never
    delay anything visible. */
 export async function detectCountry(): Promise<string | null> {
   try {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 3000);
-    const res = await fetch("/cdn-cgi/trace", { signal: ctrl.signal });
-    clearTimeout(timer);
-    if (res.ok) {
-      const text = await res.text();
-      const m = text.match(/(?:^|\n)loc=([A-Z]{2})/);
-      if (m && m[1] !== "XX") return m[1];
+    try {
+      const res = await fetch("/api/geo", { signal: ctrl.signal });
+      if (res.ok) {
+        const data = (await res.json()) as { country?: string | null };
+        if (typeof data.country === "string" && /^[A-Z]{2}$/.test(data.country) && data.country !== "XX") {
+          return data.country;
+        }
+      }
+    } finally {
+      clearTimeout(timer);
     }
   } catch {
     // fall through to timezone fallback
