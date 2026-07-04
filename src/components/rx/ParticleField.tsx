@@ -21,8 +21,9 @@ function makeTargets(f: ParticleFormation, n: number): Float32Array {
       const cols = Math.ceil(Math.sqrt(n * (4 / 3)));
       const rows = Math.ceil(n / cols);
       const c = i % cols, r = Math.floor(i / cols);
-      x = -1.7 + (c / (cols - 1)) * 3.4 + (Math.random() - 0.5) * 0.05;
-      y = 1.2 - (r / (rows - 1)) * 2.4 + (Math.random() - 0.5) * 0.05;
+      x = -1.7 + (c / (cols - 1)) * 3.4 + (Math.random() - 0.5) * 0.02;
+      y = 1.2 - (r / (rows - 1)) * 2.4 + (Math.random() - 0.5) * 0.02;
+      z = 0; // grid reads as a crisp lattice: no depth jitter
     } else if (f === "arrow") {
       const half = i < n / 2;
       const u = half ? (i / (n / 2)) : (i - n / 2) / (n / 2);
@@ -85,14 +86,18 @@ function makeSprite(): HTMLCanvasElement {
    and falls back to HTML dots when onFail fires. */
 export function ParticleField({
   formation,
+  onReady,
   onFail,
 }: {
   formation: ParticleFormation;
+  onReady?: () => void;
   onFail?: () => void;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const formationRef = useRef(formation);
   formationRef.current = formation;
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
   const onFailRef = useRef(onFail);
   onFailRef.current = onFail;
 
@@ -110,9 +115,12 @@ export function ParticleField({
     import("three")
       .then((THREE) => {
         if (cancelled || !hostRef.current) return;
+        // declared outside the try so the catch below can best-effort dispose
+        // it even if a later line in the try throws after creation.
+        let renderer: InstanceType<typeof THREE.WebGLRenderer> | undefined;
         try {
           const N = window.innerWidth <= 820 ? 1400 : 2800;
-          const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+          renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
           const w = host.clientWidth || 640;
           const h = host.clientHeight || 480;
@@ -171,6 +179,7 @@ export function ParticleField({
           let currentFormation = formationRef.current;
           let raf = 0;
           let running = true;
+          let firstFrame = false;
           const clock = new THREE.Clock();
 
           const tick = () => {
@@ -182,13 +191,16 @@ export function ParticleField({
               currentFormation = formationRef.current;
               targets = makeTargets(currentFormation, N);
             }
+            // grid must read as a crisp lattice: damp the ambient drift so
+            // jitter stays well under the lattice's ~0.057 spacing.
+            const driftAmp = currentFormation === "grid" ? 0.03 * 0.25 : 0.03;
             const arr = geo.getAttribute("position") as { array: Float32Array; needsUpdate: boolean };
             const p = arr.array;
             for (let i = 0; i < N; i++) {
               const ix = i * 3, iy = ix + 1, iz = ix + 2;
               const k = 0.045 + (seeds[i] % 1) * 0.035; // per-particle stagger
-              let tx = targets[ix] + Math.sin(t * 0.8 + seeds[i]) * 0.03;
-              let ty = targets[iy] + Math.cos(t * 0.7 + seeds[i] * 1.3) * 0.03;
+              let tx = targets[ix] + Math.sin(t * 0.8 + seeds[i]) * driftAmp;
+              let ty = targets[iy] + Math.cos(t * 0.7 + seeds[i] * 1.3) * driftAmp;
               if (pointer.active) {
                 const dx = p[ix] - pointer.x;
                 const dy = p[iy] - pointer.y;
@@ -206,22 +218,36 @@ export function ParticleField({
             }
             arr.needsUpdate = true;
             points.rotation.y = Math.sin(t * 0.22) * 0.16; // gentle sway
-            renderer.render(scene, camera);
+            renderer!.render(scene, camera);
+            if (!firstFrame) {
+              firstFrame = true;
+              onReadyRef.current?.();
+            }
           };
           raf = requestAnimationFrame(tick);
 
-          // pause offscreen / hidden tab
+          // pause offscreen / hidden tab. Two independent booleans so a
+          // tab-visibility change never clobbers the intersection verdict
+          // (and vice versa) — resuming a background tab while the hero is
+          // scrolled away must not resume rendering it offscreen.
+          let onscreen = true;
+          let tabVisible = !document.hidden;
+          const updateRunning = () => { running = onscreen && tabVisible; };
           const io = "IntersectionObserver" in window
-            ? new IntersectionObserver((es) => { running = es.some((e) => e.isIntersecting); }, { threshold: 0.05 })
+            ? new IntersectionObserver((es) => {
+                onscreen = es.some((e) => e.isIntersecting);
+                updateRunning();
+              }, { threshold: 0.05 })
             : null;
           io?.observe(host);
-          const onVis = () => { running = !document.hidden; };
+          const onVis = () => { tabVisible = !document.hidden; updateRunning(); };
           document.addEventListener("visibilitychange", onVis);
+          updateRunning();
 
           const onResize = () => {
             const ww = host.clientWidth || 640;
             const hh = host.clientHeight || 480;
-            renderer.setSize(ww, hh);
+            renderer!.setSize(ww, hh);
             camera.aspect = ww / hh;
             camera.updateProjectionMatrix();
           };
@@ -237,10 +263,19 @@ export function ParticleField({
             geo.dispose();
             mat.dispose();
             tex.dispose();
-            renderer.dispose();
-            renderer.domElement.remove();
+            renderer!.dispose();
+            renderer!.domElement.remove();
           };
         } catch {
+          // best-effort cleanup: renderer may already exist (and own a live
+          // WebGL context + canvas in the DOM) even if a later line in this
+          // try block is what threw.
+          try {
+            renderer?.dispose();
+            renderer?.domElement?.remove();
+          } catch {
+            /* noop */
+          }
           onFailRef.current?.();
         }
       })
@@ -253,7 +288,6 @@ export function ParticleField({
       cleanup?.();
     };
     // mount-once by design: formation changes flow through formationRef
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div ref={hostRef} style={{ position: "absolute", inset: 0 }} aria-hidden />;

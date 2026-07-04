@@ -55,7 +55,10 @@ const cornerBase: React.CSSProperties = { position: "absolute", width: 22, heigh
 
 export function HeroFormation() {
   const [formation, setFormation] = useState<Formation>("drone");
-  const [mode, setMode] = useState<"particles" | "dots">("dots");
+  // "warming": three.js is mounting behind the dots (opacity 0) so the
+  // canvas can produce its first frame before the dots are removed — this
+  // guarantees the panel is never blank while three.js loads.
+  const [mode, setMode] = useState<"particles" | "warming" | "dots">("dots");
   const [alt, setAlt] = useState("ALT 118 m");
   const [acc, setAcc] = useState("ACC 98.4%");
   const userPicked = useRef(false);
@@ -65,7 +68,7 @@ export function HeroFormation() {
   useEffect(() => {
     const reduce =
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduce) setMode("particles");
+    if (!reduce) setMode("warming");
     if (reduce) return;
     const id = setInterval(() => {
       if (userPicked.current) return;
@@ -108,9 +111,23 @@ export function HeroFormation() {
         <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#070708", overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(240px 180px at 50% 48%, rgba(232,72,8,.16), transparent 70%)" }} />
           <div className="rx-radar" style={{ position: "absolute", left: "-50%", top: "-50%", width: "200%", height: "200%", background: "conic-gradient(from 0deg, rgba(232,72,8,.24), rgba(232,72,8,0) 40%)", transformOrigin: "50% 50%", pointerEvents: "none" }} />
-          {mode === "particles" ? (
-            <ParticleField formation={formation} onFail={() => setMode("dots")} />
-          ) : (
+          {(mode === "particles" || mode === "warming") && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: mode === "particles" ? 1 : 0,
+                transition: "opacity .5s",
+              }}
+            >
+              <ParticleField
+                formation={formation}
+                onReady={() => setMode("particles")}
+                onFail={() => setMode("dots")}
+              />
+            </div>
+          )}
+          {(mode === "dots" || mode === "warming") && (
             <div style={{ position: "absolute", inset: 0 }}>
               {Array.from({ length: N }, (_, i) => {
                 const [left, top] = pos(i, htmlFormation);
