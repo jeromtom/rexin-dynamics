@@ -180,13 +180,14 @@ export function ParticleField({
           let raf = 0;
           let running = true;
           let firstFrame = false;
-          const clock = new THREE.Clock();
+          // three@0.185 deprecated THREE.Clock; use a plain timestamp instead.
+          const t0 = performance.now();
 
           const tick = () => {
             if (cancelled) return;
             raf = requestAnimationFrame(tick);
             if (!running) return;
-            const t = clock.getElapsedTime();
+            const t = (performance.now() - t0) / 1000;
             if (formationRef.current !== currentFormation) {
               currentFormation = formationRef.current;
               targets = makeTargets(currentFormation, N);

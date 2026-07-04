@@ -88,6 +88,14 @@ function countryFromTimezone(): string | null {
    timezone fallback below takes over. 3s timeout so slow networks never
    delay anything visible. */
 export async function detectCountry(): Promise<string | null> {
+  // The /api/geo endpoint only exists in the Cloudflare Worker (see
+  // worker/index.js); it is never present under plain `next dev`, so the
+  // fetch below always 404s there and Chrome logs a network error. Short-
+  // circuit straight to the timezone fallback in dev. `npm run preview` and
+  // production both run the built Worker, so this branch never applies
+  // there. Next.js inlines NODE_ENV at build time, so the production
+  // bundle drops this check entirely and is unaffected.
+  if (process.env.NODE_ENV === "development") return countryFromTimezone();
   try {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 3000);
