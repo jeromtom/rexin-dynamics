@@ -106,7 +106,7 @@ const faqs = [
   },
   {
     q: "Who founded Rexin Dynamics?",
-    a: "Rexin Dynamics was founded by Jerom Tom (CEO) and Junaid CK (CTO).",
+    a: "Rexin Dynamics was co-founded by Jerom Tom and Junaid CK. Today it is led by founder and CEO Jerom Tom, with engineering built around AI systems working alongside him.",
   },
   {
     q: "Is Rexin Dynamics backed by any institution?",
@@ -627,37 +627,44 @@ export default function Home() {
             <SplitHeading>People behind the systems</SplitHeading>
           </div>
           <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-            {[
-              { name: "Jerom Tom", role: "CEO · FOUNDER", desc: "Leads the vision and strategy.", img: "/team-jerom.png", email: "jerom@rexindynamics.com", linkedin: "https://linkedin.com/in/jeromtom" },
-              { name: "Junaid CK", role: "CTO · FOUNDER", desc: "Develops the software and flight systems.", img: "/team-junaid.png", email: "junaid@rexindynamics.com", linkedin: "https://www.linkedin.com/in/junaid-c-k/" },
-            ].map((m, i) => (
-              <div key={m.name} className="rx-rise" style={{ animationDelay: i ? "0.07s" : undefined }}>
-                <GlowCard className="rx-team-card" style={{ background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
-                  <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.img} alt={`${m.name}, ${m.role.split(" · ")[0]} of Rexin Dynamics`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <div className="rx-rise">
+              <GlowCard className="rx-team-card" style={{ background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
+                <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/team-jerom.png" alt="Jerom Tom, FOUNDER of Rexin Dynamics" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+                <div>
+                  <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>FOUNDER · CEO</div>
+                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>Jerom Tom</h3>
+                  <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>Leads the vision, strategy and delivery.</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
+                    <a href="mailto:jerom@rexindynamics.com" className="rx-mono" style={{ fontSize: 12, color: "var(--rx-text-muted)" }}>jerom@rexindynamics.com</a>
+                    <a
+                      href="https://linkedin.com/in/jeromtom"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rx-mono"
+                      aria-label="Jerom Tom on LinkedIn"
+                      style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, color: "var(--rx-accent)" }}
+                    >
+                      LINKEDIN <RXIcon name="arrowUpRight" size={13} />
+                    </a>
                   </div>
-                  <div>
-                    <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>{m.role}</div>
-                    <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>{m.name}</h3>
-                    <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>{m.desc}</p>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
-                      <a href={`mailto:${m.email}`} className="rx-mono" style={{ fontSize: 12, color: "var(--rx-text-muted)" }}>{m.email}</a>
-                      <a
-                        href={m.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rx-mono"
-                        aria-label={`${m.name} on LinkedIn`}
-                        style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, color: "var(--rx-accent)" }}
-                      >
-                        LINKEDIN <RXIcon name="arrowUpRight" size={13} />
-                      </a>
-                    </div>
-                  </div>
-                </GlowCard>
-              </div>
-            ))}
+                </div>
+              </GlowCard>
+            </div>
+            <div className="rx-rise" style={{ animationDelay: "0.07s" }}>
+              <GlowCard className="rx-team-card" style={{ background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
+                <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-accent-tint)", border: "1px solid var(--rx-border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <RXIcon name="cpu" size={40} style={{ color: "var(--rx-accent)" }} />
+                </div>
+                <div>
+                  <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>HOW WE BUILD</div>
+                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>AI-native engineering</h3>
+                  <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>Engineering at Rexin is led by Jerom and built with AI systems in the loop end to end: Claude works across design, code and review on everything we ship. We build with the tools we sell.</p>
+                </div>
+              </GlowCard>
+            </div>
           </div>
         </div>
       </section>
