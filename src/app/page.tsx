@@ -15,6 +15,7 @@ import { SplitHeading } from "@/components/rx/SplitHeading";
 import { ParallaxMotif } from "@/components/rx/ParallaxMotif";
 import { GlowCard } from "@/components/rx/GlowCard";
 import { EngageSequence } from "@/components/rx/EngageSequence";
+import { RawEmbed } from "@/components/raw-embed";
 
 const MAX_W = 1200;
 
@@ -782,7 +783,9 @@ export default function Home() {
             </div>
 
             <div className="rx-rise" style={{ animationDelay: "0.08s", background: "#0e0e10", border: "1px solid #1f1f22", borderRadius: 20, padding: 28 }}>
-              {!sent ? (
+              {process.env.NEXT_PUBLIC_NEETOFORM_EMBED_SNIPPET ? (
+                <RawEmbed html={process.env.NEXT_PUBLIC_NEETOFORM_EMBED_SNIPPET} />
+              ) : !sent ? (
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                     <span className="rx-field-label">Name</span>

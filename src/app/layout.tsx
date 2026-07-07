@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Montserrat, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { RawEmbed } from "@/components/raw-embed";
 
 const montserrat = Montserrat({
   variable: "--rx-font-display",
@@ -241,6 +242,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
+        {/* NeetoChat widget: no-op until NEXT_PUBLIC_NEETOCHAT_EMBED_SNIPPET is set
+            (paste the snippet from NeetoChat's dashboard -> Settings -> Installation). */}
+        <RawEmbed html={process.env.NEXT_PUBLIC_NEETOCHAT_EMBED_SNIPPET} />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
