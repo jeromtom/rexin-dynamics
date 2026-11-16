@@ -11,7 +11,7 @@ export default function PrivacyPage() {
   return (
     <LegalShell
       title="Privacy Policy"
-      intro="Rexin Dynamics Private Limited – Registered Address: KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662."
+      intro="Rexin Dynamics Private Limited – Company Address: First Floor, Integrated Startup Complex, Kerala Startup Mission, Kerala Technology Innovation Zone, Kinfra Hi-Tech Park, HMT Colony P.O., Kalamassery, Kochi, Kerala 683503."
     >
       <p className="rx-legal-updated" suppressHydrationWarning>
         Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
           <strong>Time:</strong> Monday - Friday (9:00 - 18:00)
         </p>
         <p>
-          <strong>Address:</strong> KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662, India
+          <strong>Address:</strong> First Floor, Integrated Startup Complex, Kerala Startup Mission, Kerala Technology Innovation Zone, Kinfra Hi-Tech Park, HMT Colony P.O., Kalamassery, Kochi, Kerala 683503, India
         </p>
       </section>
     </LegalShell>

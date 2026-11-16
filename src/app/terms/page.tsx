@@ -11,7 +11,7 @@ export default function TermsPage() {
   return (
     <LegalShell
       title="Terms & Conditions"
-      intro="Rexin Dynamics Private Limited – Registered Address: KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662."
+      intro="Rexin Dynamics Private Limited – Company Address: First Floor, Integrated Startup Complex, Kerala Startup Mission, Kerala Technology Innovation Zone, Kinfra Hi-Tech Park, HMT Colony P.O., Kalamassery, Kochi, Kerala 683503."
     >
       <p className="rx-legal-updated" suppressHydrationWarning>
         Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
@@ -26,7 +26,7 @@ export default function TermsPage() {
       </p>
 
       <p>
-        The Platform is owned by Rexin Dynamics Private Limited, a company incorporated under the Companies Act, 1956 with its registered office at KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam-686662, Kerala, Ernakulam, India (hereinafter referred to as &apos;Platform Owner&apos;, &apos;we&apos;, &apos;us&apos;, &apos;our&apos;).
+        The Platform is owned by Rexin Dynamics Private Limited, a company incorporated under the Companies Act, 2013, with its company address at First Floor, Integrated Startup Complex, Kerala Startup Mission, Kerala Technology Innovation Zone, Kinfra Hi-Tech Park, HMT Colony P.O., Kalamassery, Kochi, Kerala 683503, India (hereinafter referred to as &apos;Platform Owner&apos;, &apos;we&apos;, &apos;us&apos;, &apos;our&apos;).
       </p>
 
       <p>
@@ -139,7 +139,7 @@ export default function TermsPage() {
           <strong>Mobile:</strong> +91 89215 88769
         </p>
         <p>
-          <strong>Address:</strong> KODINJIYIL, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662, India
+          <strong>Address:</strong> First Floor, Integrated Startup Complex, Kerala Startup Mission, Kerala Technology Innovation Zone, Kinfra Hi-Tech Park, HMT Colony P.O., Kalamassery, Kochi, Kerala 683503, India
         </p>
       </section>
     </LegalShell>

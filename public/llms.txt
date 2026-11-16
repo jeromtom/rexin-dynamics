@@ -1,33 +1,48 @@
 # Rexin Dynamics
 
-> Rexin Dynamics is an AI and robotics company in Kochi, Kerala, India, working
-> with businesses worldwide. We deliver AI automation, website and web app
-> development, AI voice agents and WhatsApp automation, and we are building
-> indigenous autonomous drones and the agentic AI behind them. Getting closer
-> to Physical AI.
-
-We ship AI and software for clients globally and fund a harder mission in
-aerial robotics. We invoice in USD, CAD, AED, GBP, EUR and INR.
+> Rexin Dynamics Private Limited designs digital systems and aerial systems from
+> Kochi, Kerala, India. Work is organised across Automations & Agents, Websites
+> & Products, and Aerial Systems.
 
 ## Services
-- AI automation: agentic workflows that run the busywork with a human in the loop
-- Website and web app development: fast, modern sites and product front-ends
-- AI voice agents: answer calls, qualify leads and book appointments 24/7
-- WhatsApp agents: instant replies, routing and follow-ups
-- Aerial robotics: custom drone builds, autonomous flight R&D, workshops and labs
+
+- Automations & Agents: AI workflow automation; voice and WhatsApp agents.
+- Websites & Products: websites and web apps; Rapid MVP Sprint, defined as one
+  scoped and deployable workflow in seven days once requirements are agreed.
+- Aerial Systems (available engagements): custom aerial platforms, drone light
+  shows, workshops and labs.
+- Aerial Systems R&D: autonomous-flight research and development, scoped
+  separately from available engagements.
+
+## Delivery and invoicing
+
+- Delivery begins with the operating context, scope, dependencies, and agreed
+  handover.
+- Supported invoice currencies: USD, CAD, AED, GBP, EUR, INR, AUD, SGD, NZD,
+  CHF.
 
 ## Company
-- Founders: Jerom Tom (CEO), Junaid CK (CTO)
-- Backed by: IPTIF, IIT Palakkad (DISHA-EIR Program); Buimerc India Foundation
-- Registered: Kodinjiyil, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662, India
+
+- Leadership: Jerom Tom, Founder and CEO.
+- DPIIT Certificate of Recognition: DIPP233529.
+- Kerala Startup Mission Unique ID: DIPP233529/2025/KSUM5047.
+- Corporate Identity Number (CIN): U26515KL2025PTC098575 (incorporated 19 November 2025).
+- Corporate office: First Floor, Integrated Startup Complex, Kerala Startup
+  Mission, Kerala Technology Innovation Zone, Kinfra Hi-Tech Park, HMT Colony
+  P.O., Kalamassery, Kochi, Kerala 683503, India.
+- [Certificate of Incorporation](https://rexindynamics.com/documents/certificate-of-incorporation.pdf)
+- [DPIIT Certificate of Recognition](https://rexindynamics.com/documents/dpiit-certificate-of-recognition.pdf)
+- [Kerala Startup Mission Startup Certificate](https://rexindynamics.com/documents/ksum-startup-certificate.pdf)
 
 ## Contact
+
 - Email: contact@rexindynamics.com
 - Phone: +91 89215 88769
 - LinkedIn: https://linkedin.com/company/rexin-dynamics
 - Instagram: https://instagram.com/rexindynamics
 
 ## Legal
+
 - [Terms & Conditions](https://rexindynamics.com/terms/)
 - [Privacy Policy](https://rexindynamics.com/privacy/)
 - [Refund & Cancellation](https://rexindynamics.com/refund-cancellation/)

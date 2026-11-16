@@ -1,62 +1,60 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Inter, JetBrains_Mono } from "next/font/google";
+import { IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
+
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const montserrat = Montserrat({
-  variable: "--rx-font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--rx-font-body",
+const plexSans = IBM_Plex_Sans({
+  variable: "--font-ibm-plex",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--rx-font-mono",
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rexindynamics.com";
+const isPreview = process.env.NEXT_PUBLIC_DEPLOY_ENV === "preview";
+const title = isPreview
+  ? "Rexin Dynamics — Industrial redesign preview"
+  : "Rexin Dynamics — Digital and aerial systems";
 const description =
-  "Rexin Dynamics is an AI and robotics company in Kochi, Kerala, India working with businesses worldwide. We deliver AI automation, website and web app development, AI voice agents and WhatsApp automation, and we are building indigenous autonomous drones and the agentic AI behind them, getting closer to Physical AI.";
+  "Rexin Dynamics designs automation, web products, and aerial systems from Kochi, Kerala. Services include AI workflow automation, voice and WhatsApp agents, focused web delivery, custom aerial platforms, drone light shows, workshops, and autonomous-flight R&D.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rexindynamics.com"),
-  title: "Rexin Dynamics: Getting closer to Physical AI",
+  metadataBase: new URL(siteUrl),
+  title,
   description,
   alternates: { canonical: "/" },
   keywords: [
-    "AI automation",
-    "agentic AI",
-    "website development",
-    "web app development",
-    "AI voice agents",
-    "WhatsApp automation",
-    "autonomous drones",
-    "aerial robotics",
-    "Physical AI",
+    "AI workflow automation",
+    "voice agents",
+    "WhatsApp agents",
+    "websites",
+    "web apps",
+    "Rapid MVP Sprint",
+    "aerial systems",
+    "custom aerial platforms",
+    "drone light shows",
+    "autonomous flight R&D",
     "Kochi",
     "Kerala",
-    "India",
     "Rexin Dynamics",
-    "Rexin Dynamics Private Limited",
   ],
   authors: [{ name: "Rexin Dynamics Private Limited" }],
   creator: "Rexin Dynamics Private Limited",
   publisher: "Rexin Dynamics Private Limited",
   robots: {
-    index: true,
-    follow: true,
+    index: !isPreview,
+    follow: !isPreview,
     googleBot: {
-      index: true,
-      follow: true,
+      index: !isPreview,
+      follow: !isPreview,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
@@ -64,151 +62,90 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://rexindynamics.com",
+    locale: "en_IN",
+    url: siteUrl,
     siteName: "Rexin Dynamics",
-    title: "Rexin Dynamics: Getting closer to Physical AI",
+    title,
     description,
-    images: [
-      {
-        url: "https://rexindynamics.com/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Rexin Dynamics: AI, automation and aerial robotics",
-      },
-    ],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Rexin Dynamics — Digital and aerial systems" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rexin Dynamics: Getting closer to Physical AI",
+    title,
     description,
-    images: ["https://rexindynamics.com/og-image.jpg"],
-    creator: "@rexindynamics",
+    images: ["/og-image.jpg"],
   },
 };
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
+export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Rexin Dynamics Private Limited",
   alternateName: "Rexin Dynamics",
-  url: "https://rexindynamics.com",
-  logo: "https://rexindynamics.com/og-image.jpg",
+  url: siteUrl,
+  logo: new URL("/og-image.jpg", siteUrl).toString(),
   description,
-  slogan: "Getting closer to Physical AI.",
-  foundingLocation: "Kochi, Kerala, India",
-  areaServed: [
-    "Worldwide",
-    "United States",
-    "Canada",
-    "United Arab Emirates",
-    "United Kingdom",
-    "European Union",
-    "India",
-    "Australia",
-    "Singapore",
-    "New Zealand",
-    "Switzerland",
+  slogan: "Digital systems. Aerial systems.",
+  identifier: [
+    { "@type": "PropertyValue", name: "Corporate Identity Number (CIN)", value: "U26515KL2025PTC098575" },
+    { "@type": "PropertyValue", name: "DPIIT Certificate of Recognition", value: "DIPP233529" },
+    { "@type": "PropertyValue", name: "Kerala Startup Mission Unique ID", value: "DIPP233529/2025/KSUM5047" },
   ],
+  foundingLocation: "Kochi, Kerala, India",
   currenciesAccepted: "USD, CAD, AED, GBP, EUR, INR, AUD, SGD, NZD, CHF",
   knowsAbout: [
-    "AI automation",
-    "Agentic AI",
-    "Multi-modal AI",
-    "Workflow automation",
-    "Website development",
-    "Web app development",
-    "AI voice agents",
-    "WhatsApp automation",
-    "Conversational AI",
-    "Aerial robotics",
-    "Autonomous drones",
-    "Swarm control systems",
-    "Custom drone manufacturing",
-    "Physical AI",
+    "AI workflow automation",
+    "Voice agents",
+    "WhatsApp agents",
+    "Website and web app development",
+    "Rapid MVP delivery",
+    "Custom aerial platforms",
+    "Drone light shows",
+    "Autonomous-flight research and development",
+    "Aerial systems workshops",
   ],
   email: "contact@rexindynamics.com",
   telephone: "+91-89215-88769",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Kodinjiyil, Palakuzha, Muvattupuzha",
-    addressLocality: "Ernakulam",
+    streetAddress: "First Floor, Integrated Startup Complex, Kerala Startup Mission, Kerala Technology Innovation Zone, Kinfra Hi-Tech Park, HMT Colony P.O.",
+    addressLocality: "Kalamassery, Kochi",
     addressRegion: "Kerala",
-    postalCode: "686662",
+    postalCode: "683503",
     addressCountry: "IN",
   },
   founder: [
     { "@type": "Person", name: "Jerom Tom", jobTitle: "CEO", sameAs: ["https://linkedin.com/in/jeromtom"] },
-    { "@type": "Person", name: "Junaid CK", sameAs: ["https://www.linkedin.com/in/junaid-c-k/"] },
   ],
-  sameAs: [
-    "https://linkedin.com/company/rexin-dynamics",
-    "https://instagram.com/rexindynamics",
-  ],
+  sameAs: ["https://linkedin.com/company/rexin-dynamics", "https://instagram.com/rexindynamics"],
   makesOffer: [
     {
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
-        serviceType: "MVP development",
-        name: "MVP in 7 days",
-        description:
-          "A one-week sprint that takes an idea to a working product: a web app, AI agent or automation, scoped on day one and live in production on day seven, at a fixed price.",
+        name: "Automations & Agents",
+        serviceType: "AI workflow automation and conversational agents",
+        description: "AI workflow automation plus voice and WhatsApp agents, designed around a defined operating workflow.",
       },
     },
     {
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
-        serviceType: "AI automation",
-        name: "AI automation",
-        description:
-          "Agentic workflows that connect your tools and run the busywork: data entry, follow-ups, routing and reporting, with a human in the loop. Delivered for businesses worldwide.",
+        name: "Websites & Products",
+        serviceType: "Website and web product development",
+        description: "Websites, web applications, and a Rapid MVP Sprint for one scoped and deployable workflow in seven days once requirements are agreed.",
       },
     },
     {
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
-        serviceType: "Web development",
-        name: "Website and web app development",
-        description:
-          "Fast, modern websites and web apps designed and built to ship, from marketing sites to full product front-ends.",
-      },
-    },
-    {
-      "@type": "Offer",
-      itemOffered: {
-        "@type": "Service",
-        serviceType: "AI voice agent",
-        name: "AI voice agents",
-        description:
-          "AI voice agents that answer calls, qualify leads and book appointments around the clock in a natural voice.",
-      },
-    },
-    {
-      "@type": "Offer",
-      itemOffered: {
-        "@type": "Service",
-        serviceType: "WhatsApp automation",
-        name: "WhatsApp agents",
-        description:
-          "WhatsApp automation that replies instantly, routes conversations and follows up where your customers already are.",
-      },
-    },
-    {
-      "@type": "Offer",
-      itemOffered: {
-        "@type": "Service",
-        serviceType: "Aerial robotics",
-        name: "Autonomous drones and flight systems",
-        description:
-          "Custom drone builds, autonomous flight R&D and hands-on workshops, the engineering behind our path to Physical AI.",
+        name: "Aerial Systems",
+        serviceType: "Aerial systems engineering",
+        description: "Available engagements include custom aerial platforms, drone light shows, workshops, and labs. Autonomous-flight work is separately scoped R&D.",
       },
     },
   ],
@@ -218,29 +155,17 @@ const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Rexin Dynamics",
-  url: "https://rexindynamics.com",
+  url: siteUrl,
   publisher: { "@type": "Organization", name: "Rexin Dynamics Private Limited" },
   inLanguage: "en",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${montserrat.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
-      >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
+      <body className={`${plexSans.variable} ${jetbrainsMono.variable} antialiased`}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

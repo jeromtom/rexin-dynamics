@@ -1,871 +1,383 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
-import { CURRENCY_FOCUS, detectCountry, currencyForCountry, focusForCountry } from "@/lib/geo";
-import { RXMotion } from "@/components/rx/RXMotion";
-import { Magnetic } from "@/components/rx/Magnetic";
-import { useTheme } from "@/components/theme-provider";
-import { RXIcon, type RXIconName } from "@/components/rx/RXIcon";
-import { RXButton, Eyebrow, Badge, Stat } from "@/components/rx/primitives";
-import { HeroFormation } from "@/components/rx/HeroFormation";
-import { GlobeNetwork } from "@/components/rx/GlobeNetwork";
-import { SprintTimeline } from "@/components/rx/SprintTimeline";
-import { SplitHeading } from "@/components/rx/SplitHeading";
-import { ParallaxMotif } from "@/components/rx/ParallaxMotif";
-import { GlowCard } from "@/components/rx/GlowCard";
 import { EngageSequence } from "@/components/rx/EngageSequence";
-
-const MAX_W = 1200;
+import { RXIcon, type RXIconName } from "@/components/rx/RXIcon";
+import { useTheme } from "@/components/theme-provider";
+import { currencyForCountry, detectCountry } from "@/lib/geo";
 
 const navItems = [
-  { href: "#about", label: "About" },
-  { href: "#services", label: "Services" },
-  { href: "#global", label: "Global" },
-  { href: "#team", label: "Team" },
-  { href: "#contact", label: "Contact" },
+  { href: "#systems", label: "Systems" },
+  { href: "#process", label: "Process" },
+  { href: "#operations", label: "Operations" },
+  { href: "#company", label: "Company" },
 ];
 
-const heroStats = [
-  { idx: "01", value: "100", unit: "+", label: "projects shipped" },
-  { idx: "02", value: "50", unit: "+", label: "clients & partners" },
-  { idx: "03", value: "24/7", unit: "", label: "support in your timezone" },
-  { idx: "04", value: "10", unit: "", label: "currencies billed" },
+type Service = {
+  title: string;
+  description: string;
+  topic: string;
+  status?: "Available" | "R&D";
+  note?: string;
+};
+
+type ServiceLine = {
+  id: string;
+  number: string;
+  label: string;
+  title: string;
+  description: string;
+  icon: RXIconName;
+  services: Service[];
+};
+
+const serviceLines: ServiceLine[] = [
+  {
+    id: "automations",
+    number: "01",
+    label: "Digital systems",
+    title: "Automations & agents",
+    description:
+      "Operational systems that connect the tools your team already uses and keep routine work moving with clear human checkpoints.",
+    icon: "cpu",
+    services: [
+      {
+        title: "AI workflow automation",
+        description:
+          "Map a repeatable process, connect its inputs and outputs, and build the automation around the decisions that still need a person.",
+        topic: "Automations & Agents",
+        status: "Available",
+      },
+      {
+        title: "Voice & WhatsApp agents",
+        description:
+          "Conversational agents for calls and WhatsApp workflows, designed around the specific handoff, qualification, or follow-up path you need.",
+        topic: "Automations & Agents",
+        status: "Available",
+      },
+    ],
+  },
+  {
+    id: "products",
+    number: "02",
+    label: "Digital systems",
+    title: "Websites & products",
+    description:
+      "Clear public-facing sites and focused web products, designed as usable systems rather than decorative launches.",
+    icon: "code",
+    services: [
+      {
+        title: "Websites & web apps",
+        description:
+          "Websites and web applications with an information structure, interface, and deployment path matched to the work they need to do.",
+        topic: "Websites & Products",
+        status: "Available",
+      },
+      {
+        title: "Rapid MVP Sprint",
+        description:
+          "One scoped and deployable workflow in seven days, once requirements are agreed. It is a focused delivery term, not an open-ended product build.",
+        topic: "Rapid MVP Sprint",
+        status: "Available",
+        note: "One workflow · seven days · deployable scope",
+      },
+    ],
+  },
+  {
+    id: "aerial",
+    number: "03",
+    label: "Aerial systems",
+    title: "Aerial systems",
+    description:
+      "Practical aerial engagements and longer-horizon flight research are intentionally separated, so the delivery path is clear from the start.",
+    icon: "drone",
+    services: [
+      {
+        title: "Custom aerial platforms",
+        description:
+          "Mission-specific aerial platforms developed around the airframe, payload, and operating conditions that define the work.",
+        topic: "Aerial Systems",
+        status: "Available",
+      },
+      {
+        title: "Drone light shows",
+        description:
+          "Aerial-light-show engagements planned around the event brief, flight area, choreography, and operational requirements.",
+        topic: "Aerial Systems",
+        status: "Available",
+      },
+      {
+        title: "Workshops & labs",
+        description:
+          "Hands-on aerial-systems sessions for schools, colleges, and engineering teams, shaped to the participants and available facilities.",
+        topic: "Aerial Systems",
+        status: "Available",
+      },
+      {
+        title: "Autonomous-flight R&D",
+        description:
+          "Exploratory work in autonomous flight, control, and related aerial systems. This is research work, scoped separately from available engagements.",
+        topic: "Aerial Systems R&D",
+        status: "R&D",
+      },
+    ],
+  },
 ];
 
-type ServiceCard = { icon: RXIconName; tag: string; title: string; body: string };
-
-const aiServices: ServiceCard[] = [
-  { icon: "cpu", tag: "WORLDWIDE", title: "AI automation", body: "We connect your tools and let agents run the busywork: data entry, follow-ups, routing and reporting, with a human in the loop where it matters." },
-  { icon: "code", tag: "WORLDWIDE", title: "Website development", body: "Fast, modern websites and web apps, designed and built to ship. From marketing sites to full product front-ends." },
-  { icon: "radio", tag: "24/7", title: "Voice agents", body: "AI voice agents that answer calls, qualify leads and book appointments around the clock, in a natural voice." },
-  { icon: "message", tag: "24/7", title: "WhatsApp agents", body: "WhatsApp automation that replies instantly, routes conversations and follows up, right where your customers already are." },
+const currencies = [
+  { code: "USD", name: "US dollar" },
+  { code: "CAD", name: "Canadian dollar" },
+  { code: "AED", name: "UAE dirham" },
+  { code: "GBP", name: "Pound sterling" },
+  { code: "EUR", name: "Euro" },
+  { code: "INR", name: "Indian rupee" },
+  { code: "AUD", name: "Australian dollar" },
+  { code: "SGD", name: "Singapore dollar" },
+  { code: "NZD", name: "New Zealand dollar" },
+  { code: "CHF", name: "Swiss franc" },
 ];
 
-const airServices: ServiceCard[] = [
-  { icon: "drone", tag: "MISSION", title: "Custom drone builds", body: "Mission-specific multirotor and fixed-wing platforms, from concept and airframe to payload integration and field testing." },
-  { icon: "target", tag: "MISSION", title: "Autonomous flight R&D", body: "Long-horizon research in autonomous flight, swarming and control systems, advanced with select partners." },
-  { icon: "grid", tag: "MISSION", title: "Workshops & labs", body: "Hands-on programs in building, tuning and flying, for schools, colleges and engineering teams." },
+const processSteps = [
+  { n: "01", title: "Frame the work", body: "Start with the operating problem, constraints, and the decision that defines success." },
+  { n: "02", title: "Set the scope", body: "Turn the brief into a defined delivery path, with terms and dependencies made explicit." },
+  { n: "03", title: "Build the system", body: "Design, engineering, and review proceed against the agreed workflow or aerial brief." },
+  { n: "04", title: "Deploy & hand over", body: "Put the agreed deliverable into use and document the handover, next steps, or research boundary." },
 ];
 
-type Currency = { code: string; name: string; region: string; sym: string; emoji: string };
-const CURRENCIES: Currency[] = [
-  { code: "USD", name: "US Dollar", region: "the United States", sym: "$", emoji: "💵" },
-  { code: "CAD", name: "Canadian Dollar", region: "Canada", sym: "C$", emoji: "💵" },
-  { code: "AED", name: "UAE Dirham", region: "the United Arab Emirates", sym: "", emoji: "" },
-  { code: "GBP", name: "Pound Sterling", region: "the United Kingdom", sym: "£", emoji: "💷" },
-  { code: "EUR", name: "Euro", region: "the Eurozone", sym: "€", emoji: "💶" },
-  { code: "INR", name: "Indian Rupee", region: "India", sym: "₹", emoji: "" },
-  { code: "AUD", name: "Australian Dollar", region: "Australia", sym: "A$", emoji: "💵" },
-  { code: "SGD", name: "Singapore Dollar", region: "Singapore", sym: "S$", emoji: "💵" },
-  { code: "NZD", name: "New Zealand Dollar", region: "New Zealand", sym: "NZ$", emoji: "💵" },
-  { code: "CHF", name: "Swiss Franc", region: "Switzerland", sym: "", emoji: "" },
-];
-
-const engageSteps = [
-  { n: "01", title: "Discovery call", body: "A short call to understand your goals, current systems and timelines. No cost, no commitment." },
-  { n: "02", title: "Scope & fixed quote", body: "You get a written scope and a fixed quote in your currency. No hourly surprises." },
-  { n: "03", title: "Build in milestones", body: "We deliver in milestones you can see and test, with direct access to the engineers building it." },
-  { n: "04", title: "Launch & support", body: "We take it to production and stay on for monitoring, fixes and improvements, in your timezone." },
-];
-
-const topics = [
-  "MVP in 7 days",
-  "AI automation",
-  "Website development",
-  "Voice agent",
-  "WhatsApp agent",
-  "Drone / aerial robotics",
-  "Something else",
-];
+const topics = ["Automations & Agents", "Websites & Products", "Rapid MVP Sprint", "Aerial Systems", "Aerial Systems R&D", "General inquiry"];
 
 const faqs = [
-  {
-    q: "What does Rexin Dynamics do?",
-    a: "Rexin Dynamics is an AI and robotics company in Kochi, Kerala, India. We build AI automation, websites and web apps, AI voice agents and WhatsApp automation for businesses worldwide, and we develop autonomous drones and the agentic AI behind them, getting closer to Physical AI.",
-  },
-  {
-    q: "Where is Rexin Dynamics based?",
-    a: "We are based in Kochi, Kerala, India, and registered at Kodinjiyil, Palakuzha, Muvattupuzha, Ernakulam, Kerala 686662.",
-  },
-  {
-    q: "Do you work with clients outside India?",
-    a: "Yes. Most of our clients are international. We invoice in USD, CAD, AED, GBP, EUR, INR, AUD, SGD, NZD and CHF and settle through local bank accounts, so working with us feels local wherever you are.",
-  },
-  {
-    q: "Can international clients contract with Rexin Dynamics directly?",
-    a: "Yes. Rexin Dynamics Private Limited is a DPIIT-recognised Indian private limited company, registered with Kerala Startup Mission, and holds an Import-Export Code (IEC) for cross-border services. We sign contracts and issue invoices directly to international clients in your currency.",
-  },
-  {
-    q: "What AI and software services do you offer?",
-    a: "AI automation, website and web app development, AI voice agents, and WhatsApp automation, all delivered to production.",
-  },
-  {
-    q: "What do you build in robotics?",
-    a: "Custom drone builds, autonomous flight R&D, and hands-on workshops and labs. This aerial robotics work is our path toward Physical AI, funded by our AI and software services.",
-  },
-  {
-    q: "Who founded Rexin Dynamics?",
-    a: "Rexin Dynamics was co-founded by Jerom Tom and Junaid CK. Today it is led by founder and CEO Jerom Tom, with engineering built around AI systems working alongside him.",
-  },
-  {
-    q: "Is Rexin Dynamics backed by any institution?",
-    a: "Yes. We are incubated and supported by IPTIF, IIT Palakkad under the DISHA-EIR Program, and by Buimerc India Foundation.",
-  },
-  {
-    q: "How can I contact Rexin Dynamics?",
-    a: "Email contact@rexindynamics.com or call +91 89215 88769. You can also use the contact form on this page.",
-  },
+  { q: "What is included in a Rapid MVP Sprint?", a: "The sprint is one scoped, deployable workflow delivered in seven days after requirements are agreed. The exact workflow is defined before the sprint begins." },
+  { q: "How are aerial engagements different from aerial R&D?", a: "Custom aerial platforms, drone light shows, workshops, and labs are available engagements. Autonomous-flight work is R&D and is scoped separately as exploratory work." },
+  { q: "Which invoice currencies are supported?", a: "USD, CAD, AED, GBP, EUR, INR, AUD, SGD, NZD, and CHF are supported. The operations console can preselect a supported currency from a visitor's country when available." },
+  { q: "How do we start a project?", a: "Send the operating context, desired outcome, and any timing or technical constraints. Rexin will use that to determine whether the work fits an available engagement or an R&D discussion." },
 ];
 
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
+  mainEntity: faqs.map((faq) => ({
     "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
   })),
 };
 
-const sectionPad = "var(--rx-section-y) var(--rx-section-x)";
-const sectionPadBottom = "0 var(--rx-section-x) var(--rx-section-y)";
+function Schematic() {
+  return (
+    <svg className="rd-schematic" viewBox="0 0 720 300" fill="none" aria-hidden="true">
+      <path d="M0 74H132L172 114H348L388 74H534L580 120H720" />
+      <path d="M0 220H82L118 184H306L350 228H496L552 176H720" />
+      <path d="M170 0V114M170 184v116M550 0v120M550 176v124" strokeDasharray="4 7" />
+      <circle cx="170" cy="114" r="8" />
+      <circle cx="550" cy="176" r="8" />
+      <circle cx="350" cy="228" r="5" className="rd-schematic-accent" />
+      <circle cx="580" cy="120" r="5" className="rd-schematic-accent" />
+      <path d="M350 114v114M306 184l44-70 38 70" className="rd-schematic-soft" />
+    </svg>
+  );
+}
 
 export default function Home() {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [currency, setCurrency] = useState("USD");
-  const [pickedCurrency, setPickedCurrency] = useState<string | null>(null);
-  const [sent, setSent] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
-  const bloomRef = useRef<HTMLDivElement>(null);
-  const [detected, setDetected] = useState<{ currency: string; lat: number; lng: number } | null>(null);
-  const [globalSeen, setGlobalSeen] = useState(false);
-  const userPickedCurrency = useRef(false);
+  const [mounted, setMounted] = useState(false);
+  const [currency, setCurrency] = useState("INR");
+  const [visitorCountry, setVisitorCountry] = useState<string | null>(null);
+  const [selectedTopic, setSelectedTopic] = useState("General inquiry");
+  const [sent, setSent] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
-  // Reveal .rx-rise blocks as they scroll into view (design spec: gentle
-  // fade-up on scroll). Without JS the CSS mount animation still runs.
   useEffect(() => {
-    document.documentElement.classList.add("rx-js");
-    const els = Array.from(document.querySelectorAll<HTMLElement>(".rx-rise"));
-    if (!("IntersectionObserver" in window)) {
-      els.forEach((el) => el.classList.add("rx-in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("rx-in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  // Hero spotlight follows the cursor (night/show context only).
-  useEffect(() => {
-    const reduce =
-      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
-    const hero = heroRef.current;
-    const bloom = bloomRef.current;
-    if (!hero || !bloom) return;
-    const move = (e: MouseEvent) => {
-      const r = hero.getBoundingClientRect();
-      bloom.style.transform = `translate(${e.clientX - r.left}px,${e.clientY - r.top}px)`;
-      bloom.style.opacity = "1";
-    };
-    const leave = () => {
-      bloom.style.opacity = "0";
-    };
-    hero.addEventListener("mousemove", move);
-    hero.addEventListener("mouseleave", leave);
-    return () => {
-      hero.removeEventListener("mousemove", move);
-      hero.removeEventListener("mouseleave", leave);
-    };
-  }, []);
-
-  // Preselect the visitor's invoice currency from their country; the
-  // globe flight waits until the Global section is on screen.
-  useEffect(() => {
-    let stale = false;
-    detectCountry().then((cc) => {
-      if (stale || !cc || userPickedCurrency.current) return;
-      const cur = currencyForCountry(cc);
-      if (!cur) return;
-      const pos = focusForCountry(cc, cur);
-      if (!pos) return;
-      setCurrency(cur);
-      setDetected({ currency: cur, ...pos });
+    let active = true;
+    void detectCountry().then((country) => {
+      if (!active || !country) return;
+      setVisitorCountry(country);
+      const detectedCurrency = currencyForCountry(country);
+      if (!detectedCurrency) return;
+      setCurrency(detectedCurrency);
     });
-    return () => {
-      stale = true;
-    };
+    return () => { active = false; };
   }, []);
 
-  // Fire the auto flight only once the visitor can see the globe.
-  useEffect(() => {
-    const el = document.getElementById("global");
-    if (!el || !("IntersectionObserver" in window)) {
-      setGlobalSeen(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setGlobalSeen(true);
-            io.disconnect();
-          }
-        });
-      },
-      { threshold: 0.3 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  const isDark = mounted && resolvedTheme === "dark";
+  const activeCurrency = currencies.find((item) => item.code === currency) ?? currencies[5];
+  const chooseCurrency = (code: string) => { setCurrency(code); };
+  const prepareInquiry = (topic: string) => { setSelectedTopic(topic); setSent(false); };
 
-  const isNight = mounted && resolvedTheme === "dark";
-  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
-
-  const cur = CURRENCIES.find((c) => c.code === currency) ?? CURRENCIES[0];
-
-  const globeFocus = pickedCurrency
-    ? {
-        ...CURRENCY_FOCUS[pickedCurrency],
-        emoji: CURRENCIES.find((c) => c.code === pickedCurrency)?.emoji || "💸",
-      }
-    : detected && globalSeen
-      ? {
-          lat: detected.lat,
-          lng: detected.lng,
-          emoji: CURRENCIES.find((c) => c.code === detected.currency)?.emoji || "💸",
-        }
-      : null;
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = String(data.get("name") || "");
-    const email = String(data.get("email") || "");
-    const topic = String(data.get("topic") || "");
-    const message = String(data.get("message") || "");
-    const subject = encodeURIComponent(topic ? `Enquiry: ${topic}` : "Enquiry via rexindynamics.com");
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
-    window.location.href = `mailto:contact@rexindynamics.com?subject=${subject}&body=${body}`;
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") ?? "");
+    const email = String(form.get("email") ?? "");
+    const topic = String(form.get("topic") ?? "General inquiry");
+    const message = String(form.get("message") ?? "");
+    const subject = `Rexin Dynamics inquiry: ${topic}`;
+    const body = `Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`;
+    window.location.href = `mailto:contact@rexindynamics.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSent(true);
   };
 
   return (
-    <RXMotion>
-      <div
-        className="rx-root"
-        style={{
-          fontFamily: "var(--rx-font-body)",
-          background: "var(--rx-bg)",
-          color: "var(--rx-text)",
-          minHeight: "100vh",
-        }}
-      >
-      {/* ===== Header ===== */}
-      <header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          background: "var(--rx-header-bg)",
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
-          borderBottom: "1px solid var(--rx-header-border)",
-          transition: "border-color .3s ease",
-        }}
-      >
-        <div style={{ maxWidth: MAX_W, margin: "0 auto", padding: "0 var(--rx-section-x)", height: 66, display: "flex", alignItems: "center", gap: 22 }}>
-          <a href="#top" style={{ display: "flex" }} aria-label="Rexin Dynamics home">
+    <div className="rd-page">
+      <a className="rd-skip-link" href="#main">Skip to content</a>
+      <header className="rd-header">
+        <div className="rd-shell rd-header-inner">
+          <a className="rd-brand" href="#top" aria-label="Rexin Dynamics home" onClick={() => setMenuOpen(false)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={isNight ? "/assets/logos/logo_horizontal_white.svg" : "/assets/logos/logo_horizontal_primary.svg"}
-              alt="Rexin Dynamics"
-              style={{ height: 19 }}
-            />
+            <img src={isDark ? "/assets/logos/logo_horizontal_white.svg" : "/assets/logos/logo_horizontal_primary.svg"} alt="Rexin Dynamics" />
           </a>
-          <nav className="rx-hide-sm" style={{ display: "flex", gap: 2, marginLeft: 4 }}>
-            {navItems.map((item) => (
-              <a key={item.href} href={item.href} className="rx-navlink">
-                {item.label}
-              </a>
-            ))}
+          <nav className="rd-desktop-nav" aria-label="Primary navigation">
+            {navItems.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}
           </nav>
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
-            <span className="rx-hide-sm rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-text-muted)" }}>
-              KOCHI, KERALA
-            </span>
-            <button
-              onClick={toggleTheme}
-              className="rx-icon-btn"
-              aria-label={isNight ? "Switch to light mode" : "Switch to dark mode"}
-              title={isNight ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              <RXIcon name={isNight ? "sun" : "moon"} size={18} />
+          <div className="rd-header-actions">
+            <button className="rd-theme-toggle" type="button" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}>
+              <RXIcon name={isDark ? "sun" : "moon"} size={15} /><span>{isDark ? "Light" : "Dark"}</span>
             </button>
-            <Magnetic className="rx-hide-sm">
-              <RXButton variant="solid" size="sm" href="#contact">
-                Get in touch
-              </RXButton>
-            </Magnetic>
-            <button
-              onClick={() => setMenuOpen((o) => !o)}
-              className="rx-icon-btn rx-show-sm"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-            >
-              <RXIcon name={menuOpen ? "x" : "menu"} size={18} />
+            <a className="rd-header-contact" href="#contact">Start a brief</a>
+            <button className="rd-menu-button" type="button" aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? "Close navigation" : "Open navigation"} onClick={() => setMenuOpen((open) => !open)}>
+              <RXIcon name={menuOpen ? "x" : "menu"} size={20} />
             </button>
           </div>
         </div>
-        {menuOpen && (
-          <nav className="rx-mobile-nav rx-show-sm" aria-label="Mobile navigation">
-            {navItems.map((item) => (
-              <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
-                {item.label}
-              </a>
-            ))}
-            <div style={{ paddingTop: 14 }}>
-              <RXButton variant="solid" size="sm" href="#contact" fullWidth onClick={() => setMenuOpen(false)}>
-                Get in touch
-              </RXButton>
-            </div>
+        {menuOpen ? (
+          <nav id="mobile-navigation" className="rd-mobile-nav" aria-label="Mobile navigation">
+            {navItems.map((item) => <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a>)}
+            <a href="#contact" onClick={() => setMenuOpen(false)}>Start a brief</a>
           </nav>
-        )}
+        ) : null}
       </header>
 
-      {/* ===== Hero (always night) ===== */}
-      <section
-        id="top"
-        ref={heroRef}
-        className="rx-night"
-        style={{ position: "relative", overflow: "hidden", background: "#0A0A0B", color: "#fff" }}
-      >
-        <div
-          ref={bloomRef}
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            width: 520,
-            height: 520,
-            margin: "-260px 0 0 -260px",
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(232,72,8,.2), transparent 62%)",
-            pointerEvents: "none",
-            opacity: 0,
-            transition: "opacity .45s ease",
-            zIndex: 0,
-          }}
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden className="rx-drift" style={{ position: "absolute", inset: "-14% -6% auto -6%", width: "112%", opacity: 0.5, pointerEvents: "none" }} />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(1200px 480px at 74% 2%, rgba(232,72,8,.22), transparent 60%)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.6, background: "repeating-linear-gradient(to bottom, rgba(255,255,255,.025) 0 1px, transparent 1px 3px)" }} />
-
-        <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto", padding: "24px var(--rx-section-x) 78px" }}>
-          <div className="rx-mono" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, paddingBottom: 24, borderBottom: "1px solid #1a1a1d", fontSize: 11, letterSpacing: "0.12em", color: "#6E6961", flexWrap: "wrap" }}>
-            <span>REXIN&nbsp;DYNAMICS&nbsp;&nbsp;<span style={{ color: "#9C9A97" }}>{"//"}</span>&nbsp;&nbsp;KOCHI, KERALA · INDIA</span>
-            <a href="#process" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--rx-orange-400)", textDecoration: "none" }}>
-              <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
-              NEW&nbsp;{"//"}&nbsp;MVP IN 7 DAYS
-            </a>
-          </div>
-
-          <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1.12fr .88fr", gap: "48px 56px", alignItems: "center", marginTop: 52 }}>
-            <div className="rx-rise">
-              <div style={{ marginBottom: 20 }}>
-                <Eyebrow dotColor="var(--rx-orange-400)">AI · Automation · Robotics</Eyebrow>
-              </div>
-              <h1 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 900, fontSize: "clamp(40px,5.6vw,72px)", lineHeight: 0.97, letterSpacing: "-0.026em", margin: 0, maxWidth: "14ch" }}>
-                Built to fly.
-                <br />
-                <span style={{ color: "var(--rx-orange-400)" }}>Engineered to think.</span>
-              </h1>
-              <p style={{ margin: "22px 0 0", fontSize: 18, lineHeight: 1.6, color: "#cfcdc9", maxWidth: "47ch" }}>
-                Rexin Dynamics builds AI automation, websites, and voice and WhatsApp agents for businesses around the world. We put the proceeds into a harder mission: autonomous drones and the agentic AI behind them. Engineered in Kerala, delivered globally.
-              </p>
-              <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
-                <Magnetic><RXButton variant="solid" size="lg" href="#contact">Get in touch</RXButton></Magnetic>
-                <RXButton variant="outline" size="lg" href="#services">View services</RXButton>
-              </div>
+      <main id="main">
+        <section id="top" className="rd-hero" aria-labelledby="hero-title">
+          <div className="rd-shell rd-hero-inner">
+            <div className="rd-hero-marker">RDX / 01 — KOCHI, INDIA</div>
+            <div className="rd-hero-copy">
+              <p className="rd-kicker">Digital + aerial engineering</p>
+              <h1 id="hero-title">Systems for work.<br />Systems for flight.</h1>
+              <p className="rd-lede">Rexin Dynamics designs focused digital systems and aerial systems from Kochi, Kerala. The work begins with the operating constraint, then moves toward a defined delivery path.</p>
             </div>
-
-            <HeroFormation />
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 1, marginTop: 58, background: "#1a1a1d", border: "1px solid #1a1a1d", borderRadius: 12, overflow: "hidden" }}>
-            {heroStats.map((s) => (
-              <div key={s.idx} style={{ background: "#0A0A0B", padding: "22px 24px" }}>
-                <div className="rx-mono" style={{ fontSize: 10.5, color: "#6E6961", marginBottom: 10 }}>{s.idx}</div>
-                <Stat value={s.value} unit={s.unit} label={s.label} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== About ===== */}
-      <section id="about" style={{ padding: sectionPad, borderTop: "1px solid var(--rx-border)" }}>
-        <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
-          <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: ".92fr 1.08fr", gap: 56, alignItems: "center" }}>
-            <div className="rx-rise">
-              <div style={{ marginBottom: 14 }}><Eyebrow>About</Eyebrow></div>
-              <SplitHeading>We ship AI for the world. We fund robotics for the future.</SplitHeading>
-              <p style={{ margin: "20px 0 0", fontSize: 16.5, lineHeight: 1.65, color: "var(--rx-text)" }}>
-                Rexin Dynamics is an engineering-led studio in Kochi, Kerala. For companies around the world we design and ship AI automation, websites, and voice and WhatsApp agents that go straight into production.
-              </p>
-              <p style={{ margin: "14px 0 0", fontSize: 16.5, lineHeight: 1.65, color: "var(--rx-text-muted)" }}>
-                Everything we earn funds the harder mission: indigenous autonomous drones, flight systems and the agentic AI behind them. Getting closer to Physical AI.
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 24 }}>
-                <Badge variant="outline" tone="neutral">Made in India</Badge>
-                <Badge variant="soft" tone="accent" dot>Backed by IPTIF · IIT Palakkad</Badge>
-              </div>
-            </div>
-            <div className="rx-rise" style={{ animationDelay: "0.08s", position: "relative", borderRadius: 14, overflow: "hidden", border: "1px solid var(--rx-border)" }}>
-              <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#070708" }}>
-                <ParallaxMotif strength={36} style={{ position: "absolute", inset: "-10% -4% auto -4%", width: "108%", opacity: 0.85 }} />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(232,72,8,.16), transparent 55%)" }} />
-                <span className="rx-mono" style={{ position: "absolute", bottom: 14, left: 14, fontSize: 10.5, letterSpacing: "0.12em", color: "rgba(255,255,255,.82)" }}>LAB // KOCHI · R&D</span>
-              </div>
+            <div className="rd-hero-split">
+              <article className="rd-hero-discipline">
+                <div className="rd-discipline-topline"><span>01</span><span>Digital systems</span></div>
+                <h2>Automate operations. Ship useful products.</h2>
+                <p>AI workflow automation, voice and WhatsApp agents, websites, web apps, and a tightly scoped MVP Sprint.</p>
+                <a href="#systems">Explore digital systems <RXIcon name="arrowUpRight" size={16} /></a>
+              </article>
+              <article className="rd-hero-discipline">
+                <div className="rd-discipline-topline"><span>02</span><span>Aerial systems</span></div>
+                <h2>Build for the air. Research with intent.</h2>
+                <p>Custom aerial platforms, drone light shows, workshops and labs, plus separately scoped autonomous-flight R&D.</p>
+                <a href="#systems">Explore aerial systems <RXIcon name="arrowUpRight" size={16} /></a>
+              </article>
             </div>
           </div>
-        </div>
-      </section>
+          <Schematic />
+        </section>
 
-      {/* ===== Services ===== */}
-      <section id="services" style={{ padding: sectionPadBottom }}>
-        <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
-          <div className="rx-rise" style={{ maxWidth: 680 }}>
-            <div style={{ marginBottom: 14 }}><Eyebrow>What we do</Eyebrow></div>
-            <SplitHeading>Two engines, one company.</SplitHeading>
-            <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "54ch" }}>
-              AI and software pay the bills today. Aerial robotics is where we are headed. Both run on the same engineering discipline.
-            </p>
-          </div>
-
-          <div className="rx-rise rx-mono" style={{ marginTop: 40, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-text-muted)" }}>
-            <span style={{ color: "var(--rx-accent)" }}>/ 01</span> — AI &amp; SOFTWARE
-          </div>
-          <div
-            className="rx-rise rx-stack"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2,1fr)",
-              gap: 1,
-              marginTop: 14,
-              background: "var(--rx-border)",
-              border: "1px solid var(--rx-border)",
-              borderRadius: 14,
-              overflow: "hidden",
-            }}
-          >
-            {aiServices.map((card) => (
-              <GlowCard key={card.title} className="rx-service-card">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
-                    <RXIcon name={card.icon} size={22} />
-                  </span>
-                  <span className="rx-mono" style={{ fontSize: 10, letterSpacing: "0.1em", color: "var(--rx-text-muted)" }}>{card.tag}</span>
-                </div>
-                <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 21, margin: "6px 0 0", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{card.title}</h3>
-                <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{card.body}</p>
-              </GlowCard>
-            ))}
-          </div>
-
-          <div className="rx-rise rx-mono" style={{ marginTop: 40, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-text-muted)" }}>
-            <span style={{ color: "var(--rx-accent)" }}>/ 02</span> — AERIAL ROBOTICS · THE MISSION
-          </div>
-          <div
-            className="rx-rise rx-stack"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
-              gap: 1,
-              marginTop: 14,
-              background: "var(--rx-border)",
-              border: "1px solid var(--rx-border)",
-              borderRadius: 14,
-              overflow: "hidden",
-            }}
-          >
-            {airServices.map((card) => (
-              <GlowCard key={card.title} className="rx-service-card">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: "var(--rx-accent-tint)", color: "var(--rx-accent)" }}>
-                    <RXIcon name={card.icon} size={22} />
-                  </span>
-                  <span className="rx-mono" style={{ fontSize: 10, letterSpacing: "0.1em", color: "var(--rx-text-muted)" }}>{card.tag}</span>
-                </div>
-                <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 21, margin: "6px 0 0", letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{card.title}</h3>
-                <p style={{ margin: 0, fontSize: 14.5, color: "var(--rx-text-muted)", lineHeight: 1.6 }}>{card.body}</p>
-              </GlowCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== How we engage ===== */}
-      <section id="process" style={{ padding: sectionPadBottom }}>
-        <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
-          <div className="rx-rise" style={{ maxWidth: 680, marginBottom: 32 }}>
-            <div style={{ marginBottom: 14 }}><Eyebrow>How we engage</Eyebrow></div>
-            <SplitHeading>From first call to production.</SplitHeading>
-            <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "56ch" }}>
-              A simple process built for international clients: clear scope, a fixed quote in your currency, and delivery you can track.
-            </p>
-          </div>
-          <div className="rx-rise">
-            <EngageSequence steps={engageSteps} />
-          </div>
-
-          <div className="rx-rise rx-night rx-mvp-card" style={{ marginTop: 18, position: "relative", overflow: "hidden", background: "#0A0A0B", border: "1px solid var(--rx-border)", borderRadius: 14, padding: "34px 30px" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/motif/motif_lines_orange.svg" alt="" aria-hidden className="rx-drift" style={{ position: "absolute", inset: "-30% -6% auto -6%", width: "112%", opacity: 0.4, pointerEvents: "none" }} />
-            <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
-              <span className="rx-mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-orange-400)" }}>
-                <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
-                FAST TRACK {"//"} 7-DAY SPRINT
-              </span>
-              <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 900, fontSize: "clamp(28px,3.6vw,40px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: 0, color: "#fff" }}>
-                MVP in 7 days.
-              </h3>
-              <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "#cfcdc9", maxWidth: "58ch" }}>
-                In a hurry? This whole process runs in a single week: a web app, AI agent or automation, scoped with you on day one and live in production on day seven. Fixed price, in your currency.
-              </p>
-              <SprintTimeline />
-              <Magnetic><RXButton variant="solid" size="lg" href="#contact" style={{ marginTop: 6 }}>Start your sprint</RXButton></Magnetic>
+        <section id="systems" className="rd-section rd-systems" aria-labelledby="systems-title">
+          <div className="rd-shell">
+            <div className="rd-section-heading">
+              <p className="rd-kicker">Commercial systems</p>
+              <h2 id="systems-title">Three clear lines of work.</h2>
+              <p>Choose a delivery path for available work, or start an R&D discussion where the outcome still needs to be explored.</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== Global ===== */}
-      <section id="global" style={{ position: "relative", overflow: "hidden", padding: sectionPad, borderTop: "1px solid var(--rx-border)" }}>
-        <ParallaxMotif strength={80} style={{ position: "absolute", inset: "-20% 0 auto 0", width: "100%", opacity: 0.1, pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto" }}>
-          <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
-            <div className="rx-rise">
-              <div style={{ marginBottom: 14 }}><Eyebrow>Global</Eyebrow></div>
-              <SplitHeading>Built for international business.</SplitHeading>
-              <p style={{ margin: "18px 0 0", fontSize: 16.5, lineHeight: 1.65, color: "var(--rx-text)", maxWidth: "46ch" }}>
-                Most of our clients are outside India. We invoice in your currency and settle through local bank accounts, so working with Rexin feels local wherever you are.
-              </p>
-              <p className="rx-mono" style={{ margin: "18px 0 6px", fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-text-muted)" }}>SELECT A CURRENCY</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {CURRENCIES.map((c) => {
-                  const active = c.code === currency;
-                  return (
-                    <button
-                      key={c.code}
-                      onClick={() => {
-                        userPickedCurrency.current = true;
-                        setCurrency(c.code);
-                        setPickedCurrency(c.code);
-                      }}
-                      className="rx-chip"
-                      style={{
-                        padding: "10px 15px",
-                        border: `1px solid ${active ? "var(--rx-accent)" : "var(--rx-border)"}`,
-                        background: active ? "var(--rx-accent)" : "transparent",
-                        color: active ? "var(--rx-on-accent)" : "var(--rx-text)",
-                        fontWeight: active ? 700 : 600,
-                        fontSize: 13,
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      {c.sym ? `${c.sym} ${c.code}` : c.code}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="rx-mono" style={{ margin: "26px 0 8px", fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-text-muted)" }}>REGISTERED FOR CROSS-BORDER WORK</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                <Badge variant="soft" tone="accent" dot>DPIIT-recognised startup</Badge>
-                <Badge variant="outline" tone="neutral">Import-Export Code (IEC)</Badge>
-                <Badge variant="outline" tone="neutral">Kerala Startup Mission</Badge>
-                <Badge variant="outline" tone="neutral">Private Limited · India</Badge>
-              </div>
-            </div>
-            <div className="rx-rise" style={{ animationDelay: "0.08s", position: "relative", overflow: "hidden", background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 34, minHeight: 280, display: "flex", flexDirection: "column", justifyContent: "center", gap: 8 }}>
-              <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.14em", color: "var(--rx-accent)" }}>INVOICE CURRENCY</div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap" }}>
-                <span style={{ fontFamily: "var(--rx-font-display)", fontWeight: 900, fontSize: "clamp(54px,8vw,82px)", lineHeight: 1, letterSpacing: "-0.02em", color: "var(--rx-text)" }}>{cur.code}</span>
-                {cur.emoji && <span style={{ fontSize: 46, lineHeight: 1, alignSelf: "center" }}>{cur.emoji}</span>}
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--rx-text)" }}>{cur.name}</div>
-              <p style={{ margin: "8px 0 0", fontSize: 14.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "34ch" }}>
-                Billed to clients in {cur.region} and settled into our {cur.code} business account. No conversion headaches on your side.
-              </p>
-            </div>
-            <GlobeNetwork focus={globeFocus} />
-          </div>
-        </div>
-      </section>
-
-      {/* ===== Team ===== */}
-      <section id="team" style={{ padding: sectionPadBottom }}>
-        <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
-          <div className="rx-rise" style={{ marginBottom: 36 }}>
-            <div style={{ marginBottom: 14 }}><Eyebrow>Team</Eyebrow></div>
-            <SplitHeading>People behind the systems</SplitHeading>
-          </div>
-          <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-            <div className="rx-rise">
-              <GlowCard className="rx-team-card" style={{ background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
-                <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-surface-2)", border: "1px solid var(--rx-border)" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/team-jerom.png" alt="Jerom Tom, FOUNDER of Rexin Dynamics" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                </div>
-                <div>
-                  <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>FOUNDER · CEO</div>
-                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>Jerom Tom</h3>
-                  <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>Leads the vision, strategy and delivery.</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
-                    <a href="mailto:jerom@rexindynamics.com" className="rx-mono" style={{ fontSize: 12, color: "var(--rx-text-muted)" }}>jerom@rexindynamics.com</a>
-                    <a
-                      href="https://linkedin.com/in/jeromtom"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rx-mono"
-                      aria-label="Jerom Tom on LinkedIn"
-                      style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, color: "var(--rx-accent)" }}
-                    >
-                      LINKEDIN <RXIcon name="arrowUpRight" size={13} />
-                    </a>
+            <div className="rd-system-lines">
+              {serviceLines.map((line) => (
+                <article key={line.id} className={`rd-system-line rd-system-line--${line.id}`}>
+                  <div className="rd-system-summary">
+                    <div className="rd-system-number">{line.number}</div><RXIcon name={line.icon} size={24} />
+                    <p className="rd-system-label">{line.label}</p><h3>{line.title}</h3><p>{line.description}</p>
                   </div>
-                </div>
-              </GlowCard>
-            </div>
-            <div className="rx-rise" style={{ animationDelay: "0.07s" }}>
-              <GlowCard className="rx-team-card" style={{ background: "var(--rx-surface)", border: "1px solid var(--rx-border)", borderRadius: 20, padding: 22, display: "flex", gap: 20, alignItems: "center" }}>
-                <div style={{ flex: "0 0 auto", width: 104, height: 104, borderRadius: 16, overflow: "hidden", background: "var(--rx-accent-tint)", border: "1px solid var(--rx-border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <RXIcon name="cpu" size={40} style={{ color: "var(--rx-accent)" }} />
-                </div>
-                <div>
-                  <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", marginBottom: 6 }}>HOW WE BUILD</div>
-                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "var(--rx-text)" }}>AI-native engineering</h3>
-                  <p style={{ margin: "6px 0 12px", fontSize: 14, color: "var(--rx-text-muted)", lineHeight: 1.55 }}>Engineering at Rexin is led by Jerom and built with AI systems in the loop end to end: Claude works across design, code and review on everything we ship. We build with the tools we sell.</p>
-                </div>
-              </GlowCard>
+                  <div className="rd-offer-list">
+                    {line.services.map((service) => (
+                      <div className="rd-offer" key={service.title}>
+                        <div className="rd-offer-meta">{service.status ? <span data-status={service.status.toLowerCase()}>{service.status}</span> : null}{service.note ? <span>{service.note}</span> : null}</div>
+                        <h4>{service.title}</h4><p>{service.description}</p>
+                        <a href="#contact" onClick={() => prepareInquiry(service.topic)}>Discuss this scope <RXIcon name="arrowUpRight" size={15} /></a>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ===== Backed by ===== */}
-      <section id="backed" style={{ padding: sectionPadBottom }}>
-        <div style={{ maxWidth: MAX_W, margin: "0 auto" }}>
-          <div className="rx-rise" style={{ marginBottom: 36, maxWidth: 680 }}>
-            <div style={{ marginBottom: 14 }}><Eyebrow>Backed by</Eyebrow></div>
-            <SplitHeading>In good company.</SplitHeading>
-            <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--rx-text-muted)", maxWidth: "56ch" }}>
-              We are incubated and supported by institutions building India&apos;s deep-tech future. They back the engineering behind our path to Physical AI.
-            </p>
+        <section id="process" className="rd-section rd-process" aria-labelledby="process-title">
+          <div className="rd-shell">
+            <div className="rd-process-heading"><div><p className="rd-kicker">Delivery sequence</p><h2 id="process-title">Work moves through a clear sequence.</h2></div><p>On desktop, follow the sequence as the brief progresses. On smaller screens and for reduced motion, the same steps remain static and readable.</p></div>
+            <EngageSequence steps={processSteps} />
           </div>
-          <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-            {[
-              { href: "https://iptif.tech/entrepreneurship-development/entrepreneur-residence-eir", logo: "/IPTIF Logo.png", alt: "IPTIF, IIT Palakkad", title: "IPTIF, IIT Palakkad", tag: "DISHA-EIR PROGRAM", body: "Incubated through IIT Palakkad's Technology Innovation Foundation under the DISHA Entrepreneur-in-Residence program, backing our founders and the engineering behind our aerial systems.", cta: "Visit IPTIF" },
-              { href: "https://www.buimercindiafoundation.org/", logo: "/Buimerc.png", alt: "Buimerc India Foundation", title: "Buimerc India Foundation", tag: "FOUNDATION PARTNER", body: "Backing our work on indigenous aerial systems and applied AI, and our mission to build Made-in-India autonomous flight from Kerala.", cta: "Visit Buimerc" },
-            ].map((b, i) => (
-              <a key={b.title} href={b.href} target="_blank" rel="noopener noreferrer" className="rx-backed-card rx-rise" style={{ animationDelay: i ? "0.07s" : undefined }}>
-                <div style={{ background: "#fff", height: 138, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, borderBottom: "1px solid var(--rx-border)" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={b.logo} alt={b.alt} style={{ maxHeight: 66, maxWidth: "80%", width: "auto" }} />
-                </div>
-                <div style={{ padding: "26px 28px 28px" }}>
-                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, letterSpacing: "-0.01em", color: "var(--rx-text)" }}>{b.title}</h3>
-                  <div className="rx-mono" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--rx-accent)", margin: "8px 0 12px" }}>{b.tag}</div>
-                  <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "var(--rx-text-muted)" }}>{b.body}</p>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 7, marginTop: 18, fontSize: 14, fontWeight: 600, color: "var(--rx-accent)" }}>
-                    {b.cta} <RXIcon name="arrowUpRight" size={16} />
-                  </span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ===== FAQ ===== */}
-      <section id="faq" style={{ padding: sectionPadBottom }}>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-        <div style={{ maxWidth: 820, margin: "0 auto" }}>
-          <div className="rx-rise" style={{ marginBottom: 36 }}>
-            <div style={{ marginBottom: 14 }}><Eyebrow>FAQ</Eyebrow></div>
-            <SplitHeading>Questions, answered.</SplitHeading>
-          </div>
-          <div className="rx-faq" style={{ borderTop: "1px solid var(--rx-border)" }}>
-            {faqs.map((f) => (
-              <details
-                key={f.q}
-                className="rx-rise"
-                style={{ borderBottom: "1px solid var(--rx-border)", padding: "20px 0" }}
-              >
-                <summary
-                  style={{
-                    cursor: "pointer",
-                    listStyle: "none",
-                    fontFamily: "var(--rx-font-display)",
-                    fontWeight: 700,
-                    fontSize: 18,
-                    letterSpacing: "-0.01em",
-                    color: "var(--rx-text)",
-                  }}
-                >
-                  {f.q}
-                </summary>
-                <p style={{ margin: "12px 0 0", fontSize: 15.5, lineHeight: 1.65, color: "var(--rx-text-muted)" }}>
-                  {f.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== Contact (always night) ===== */}
-      <section id="contact" className="rx-night" style={{ position: "relative", overflow: "hidden", padding: sectionPad, borderTop: "1px solid #1f1f22", background: "#0A0A0B", color: "#fff" }}>
-        <ParallaxMotif strength={80} style={{ position: "absolute", inset: "auto 0 -30% 0", width: "100%", opacity: 0.16, pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto" }}>
-          <div className="rx-stack-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
-            <div className="rx-rise">
-              <div style={{ marginBottom: 14 }}><Eyebrow dotColor="var(--rx-orange-400)">Contact</Eyebrow></div>
-              <SplitHeading style={{ color: "#fff" }}>Ready when you are.</SplitHeading>
-              <p style={{ margin: "18px 0 30px", fontSize: 16.5, lineHeight: 1.65, color: "#cfcdc9", maxWidth: "42ch" }}>
-                A short message with context is enough to start. Wherever you are in the world, we reply fast.
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-                {[
-                  { icon: "mail" as const, k: "EMAIL", v: "contact@rexindynamics.com", href: "mailto:contact@rexindynamics.com" },
-                  { icon: "phone" as const, k: "PHONE", v: "+91 89215 88769", href: "tel:+918921588769" },
-                ].map((c) => (
-                  <a key={c.k} href={c.href} style={{ display: "flex", gap: 14, alignItems: "center" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 42, height: 42, borderRadius: 11, background: "#17171a", border: "1px solid #2A2A2E", color: "var(--rx-orange-400)" }}>
-                      <RXIcon name={c.icon} size={18} />
-                    </span>
-                    <span>
-                      <span className="rx-mono" style={{ display: "block", fontSize: 10.5, letterSpacing: "0.12em", color: "#6E6961" }}>{c.k}</span>
-                      <span style={{ fontSize: 15, color: "#fff" }}>{c.v}</span>
-                    </span>
-                  </a>
-                ))}
-                <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 42, height: 42, borderRadius: 11, background: "#17171a", border: "1px solid #2A2A2E", color: "var(--rx-orange-400)", flex: "0 0 auto" }}>
-                    <RXIcon name="mapPin" size={18} />
-                  </span>
-                  <span>
-                    <span className="rx-mono" style={{ display: "block", fontSize: 10.5, letterSpacing: "0.12em", color: "#6E6961" }}>REGISTERED ADDRESS</span>
-                    <span style={{ fontSize: 15, color: "#cfcdc9", lineHeight: 1.5 }}>Kodinjiyil, Palakuzha, Muvattupuzha,<br />Ernakulam, Kerala 686662</span>
-                  </span>
+        <section id="operations" className="rd-section rd-operations" aria-labelledby="operations-title">
+          <div className="rd-shell">
+            <div className="rd-section-heading rd-operations-heading"><p className="rd-kicker">Operations console</p><h2 id="operations-title">Currency routing, without the noise.</h2><p>Supported invoice currencies are listed here. When available, a country-level signal preselects the matching supported currency; nothing is stored.</p></div>
+            <div className="rd-operations-console">
+              <div className="rd-currency-panel" aria-label="Supported invoice currencies">
+                <div className="rd-console-head"><span>Invoice currency</span><span>{visitorCountry ? `Country signal / ${visitorCountry}` : "Manual selection"}</span></div>
+                <div className="rd-active-currency"><span>{activeCurrency.code}</span><p>{activeCurrency.name}</p></div>
+                <div className="rd-currency-list">
+                  {currencies.map((item) => <button key={item.code} type="button" aria-pressed={currency === item.code} className={currency === item.code ? "is-active" : ""} onClick={() => chooseCurrency(item.code)}><span>{item.code}</span><span>{item.name}</span></button>)}
                 </div>
+                <p className="rd-currency-note">Choose a supported invoice currency before sending a brief. Availability is confirmed when the scope is reviewed.</p>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="rx-rise" style={{ animationDelay: "0.08s", background: "#0e0e10", border: "1px solid #1f1f22", borderRadius: 20, padding: 28 }}>
-              {!sent ? (
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                  <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                    <span className="rx-field-label">Name</span>
-                    <input name="name" placeholder="Your name" className="rx-input" required />
-                  </label>
-                  <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                    <span className="rx-field-label">Email</span>
-                    <input name="email" type="email" placeholder="you@company.com" className="rx-input" required />
-                  </label>
-                  <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                    <span className="rx-field-label">What&apos;s this about?</span>
-                    <select name="topic" className="rx-input" defaultValue="">
-                      <option value="" disabled>Choose a topic</option>
-                      {topics.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                    <span className="rx-field-label">Message</span>
-                    <textarea name="message" rows={3} placeholder="A line or two of context" className="rx-textarea" style={{ resize: "vertical" }} />
-                  </label>
-                  <RXButton variant="solid" size="lg" type="submit" fullWidth>Send message</RXButton>
+        <section id="company" className="rd-section rd-company" aria-labelledby="company-title">
+          <div className="rd-shell rd-company-grid">
+            <div className="rd-company-heading"><p className="rd-kicker">Company</p><h2 id="company-title">A Kochi base for digital and aerial work.</h2><p>Rexin Dynamics Private Limited operates from the Kerala Startup Mission Integrated Startup Complex in Kochi, Kerala, and is led by founder and CEO Jerom Tom.</p><a className="rd-text-action" href="#contact">Start with the brief <RXIcon name="arrowUpRight" size={16} /></a></div>
+            <div className="rd-company-details">
+              <div><p className="rd-detail-label">Registration and recognition</p><div className="rd-credential-list"><article className="rd-credential"><p>Ministry of Corporate Affairs</p><strong>U26515KL2025PTC098575</strong><span>Certificate of Incorporation</span><a href="/documents/certificate-of-incorporation.pdf" target="_blank" rel="noreferrer">View incorporation certificate <RXIcon name="arrowUpRight" size={14} /></a></article><article className="rd-credential"><p>DPIIT · Startup India</p><strong>DIPP233529</strong><span>Certificate of Recognition</span><a href="/documents/dpiit-certificate-of-recognition.pdf" target="_blank" rel="noreferrer">View DPIIT certificate <RXIcon name="arrowUpRight" size={14} /></a></article><article className="rd-credential"><p>Kerala Startup Mission</p><strong>DIPP233529/2025/KSUM5047</strong><span>Unique ID</span><a href="/documents/ksum-startup-certificate.pdf" target="_blank" rel="noreferrer">View KSUM certificate <RXIcon name="arrowUpRight" size={14} /></a></article></div></div>
+              
+              <address><p className="rd-detail-label">Corporate office</p>First Floor, Integrated Startup Complex,<br />Kerala Startup Mission, Kerala Technology Innovation Zone,<br />Kinfra Hi-Tech Park, HMT Colony P.O., Kalamassery,<br />Kochi, Kerala 683503, India</address>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="rd-section rd-faq-section" aria-labelledby="faq-title">
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+          <div className="rd-shell"><div className="rd-section-heading"><p className="rd-kicker">Working notes</p><h2 id="faq-title">Useful answers before a brief.</h2></div><dl className="rd-faq-list">{faqs.map((faq) => <div key={faq.q}><dt>{faq.q}</dt><dd>{faq.a}</dd></div>)}</dl></div>
+        </section>
+
+        <section id="contact" className="rd-section rd-contact" aria-labelledby="contact-title">
+          <div className="rd-shell rd-contact-grid">
+            <div className="rd-contact-copy"><p className="rd-kicker">Start a brief</p><h2 id="contact-title">Give us the operating context.</h2><p>A short note is enough to begin: what needs to change, who uses it, and the constraint that matters most.</p><div className="rd-contact-details"><a href="mailto:contact@rexindynamics.com"><RXIcon name="mail" size={18} /> contact@rexindynamics.com</a><a href="tel:+918921588769"><RXIcon name="phone" size={18} /> +91 89215 88769</a><p><RXIcon name="mapPin" size={18} /> First Floor, Integrated Startup Complex, Kerala Startup Mission, KTIZ, Kinfra Hi-Tech Park, Kalamassery, Kochi, Kerala 683503</p></div></div>
+            <div className="rd-contact-form-wrap">
+              {sent ? <div className="rd-form-result" role="status"><RXIcon name="check" size={24} /><h3>Your email draft is ready.</h3><p>Your mail app should have opened with the enquiry details. If it did not, email contact@rexindynamics.com directly.</p><button type="button" onClick={() => setSent(false)}>Send another brief</button></div> : (
+                <form className="rd-form" onSubmit={handleSubmit}>
+                  <label><span>Name</span><input name="name" autoComplete="name" required placeholder="Your name" /></label>
+                  <label><span>Email</span><input name="email" type="email" autoComplete="email" required placeholder="you@company.com" /></label>
+                  <label><span>Topic</span><select name="topic" value={selectedTopic} onChange={(event) => setSelectedTopic(event.target.value)}>{topics.map((topic) => <option key={topic} value={topic}>{topic}</option>)}</select></label>
+                  <label><span>Brief</span><textarea name="message" rows={5} placeholder="Context, desired outcome, timing, and constraints" /></label>
+                  <button className="rd-submit" type="submit">Prepare email <RXIcon name="arrowUpRight" size={17} /></button>
                 </form>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: 320, gap: 14 }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 56, height: 56, borderRadius: "50%", background: "rgba(232,72,8,.14)", color: "var(--rx-orange-400)" }}>
-                    <RXIcon name="check" size={26} />
-                  </span>
-                  <h3 style={{ fontFamily: "var(--rx-font-display)", fontWeight: 700, fontSize: 22, margin: 0, color: "#fff" }}>Message received.</h3>
-                  <p style={{ margin: 0, fontSize: 15, color: "#9C9A97", maxWidth: "32ch" }}>Thanks for reaching out. Your email client should open with the message ready to send.</p>
-                </div>
               )}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* ===== Footer (always night) ===== */}
-      <footer className="rx-night" style={{ position: "relative", overflow: "hidden", borderTop: "1px solid #1f1f22", background: "#0A0A0B", color: "#fff" }}>
-        <ParallaxMotif strength={50} style={{ position: "absolute", top: 0, left: 0, width: "100%", opacity: 0.28, pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: MAX_W, margin: "0 auto", padding: "64px var(--rx-section-x) 36px" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 48, justifyContent: "space-between" }}>
-            <div style={{ maxWidth: 300 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/logos/logo_horizontal_white.svg" alt="Rexin Dynamics" style={{ height: 22 }} />
-              <p style={{ margin: "20px 0 0", fontSize: 14.5, lineHeight: 1.6, color: "#9C9A97" }}>
-                We build AI automation, websites and agents for businesses worldwide, and autonomous drones on our path to Physical AI. Engineered in Kerala, India.
-              </p>
-              <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-                <a href="https://linkedin.com/company/rexin-dynamics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="rx-mono" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, borderRadius: "50%", border: "1px solid #2A2A2E", color: "#9C9A97", fontSize: 13, fontWeight: 600 }}>in</a>
-                <a href="https://instagram.com/rexindynamics" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="rx-mono" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, borderRadius: "50%", border: "1px solid #2A2A2E", color: "#9C9A97", fontSize: 11, fontWeight: 600 }}>IG</a>
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 56, flexWrap: "wrap" }}>
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#fff", marginBottom: 16 }}>Explore</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-                  {navItems.filter((n) => n.href !== "#global").map((n) => (
-                    <a key={n.href} href={n.href} className="rx-footlink">{n.label}</a>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#fff", marginBottom: 16 }}>Legal</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-                  <a href="/terms/" className="rx-footlink">Terms &amp; Conditions</a>
-                  <a href="/privacy/" className="rx-footlink">Privacy Policy</a>
-                  <a href="/refund-cancellation/" className="rx-footlink">Refund &amp; Cancellation</a>
-                  <a href="/return/" className="rx-footlink">Return Policy</a>
-                  <a href="/shipping/" className="rx-footlink">Shipping Policy</a>
-                  <a href="/bank-details/" className="rx-footlink">Bank Transfer Details</a>
-                </div>
-              </div>
-            </div>
+      <footer className="rd-footer">
+        <div className="rd-shell rd-footer-inner">
+          <div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={isDark ? "/assets/logos/logo_horizontal_white.svg" : "/assets/logos/logo_horizontal_primary.svg"} alt="Rexin Dynamics" />
+            <p>Digital systems. Aerial systems. Kochi, Kerala.</p>
           </div>
-          <div style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid #2A2A2E", display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "space-between", alignItems: "center" }}>
-            <span suppressHydrationWarning style={{ fontSize: 13, color: "#6E6961" }}>© {new Date().getFullYear()} Rexin Dynamics Private Limited · Kochi, Kerala</span>
-            <span className="rx-mono" style={{ fontSize: 12, color: "#6E6961" }}>www.rexindynamics.com</span>
+          <div className="rd-footer-links">
+            <a href="/terms/">Terms</a><a href="/privacy/">Privacy</a><a href="/refund-cancellation/">Refunds</a>
+            <a href="https://linkedin.com/company/rexin-dynamics" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://instagram.com/rexindynamics" target="_blank" rel="noreferrer">Instagram</a>
           </div>
+          <p className="rd-footer-meta" suppressHydrationWarning>© {new Date().getFullYear()} Rexin Dynamics Private Limited</p>
         </div>
       </footer>
-      </div>
-    </RXMotion>
+    </div>
   );
 }

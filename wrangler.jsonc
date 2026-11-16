@@ -4,10 +4,32 @@
 	"main": "worker/index.js",
 	"assets": {
 		"directory": "./out",
-		"binding": "ASSETS"
+		"binding": "ASSETS",
+		"run_worker_first": true
+	},
+	"vars": {
+		"DEPLOY_ENV": "production"
 	},
 	"routes": [
 		{ "pattern": "rexindynamics.com", "custom_domain": true },
-		{ "pattern": "www.rexindynamics.com", "custom_domain": true }
-	]
+		{ "pattern": "www.rexindynamics.com", "custom_domain": true },
+		{ "pattern": "www.rexindynamics.com/*", "zone_name": "rexindynamics.com" }
+	],
+	"env": {
+		"preview": {
+			"name": "rexin-dynamics-preview",
+			"assets": {
+				"directory": "./out",
+				"binding": "ASSETS",
+				"run_worker_first": true
+			},
+			"vars": {
+				"DEPLOY_ENV": "preview"
+			},
+			"routes": [
+				{ "pattern": "preview.rexindynamics.com", "custom_domain": true },
+				{ "pattern": "preview.rexindynamics.com/*", "zone_name": "rexindynamics.com" }
+			]
+		}
+	}
 }
