@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ParticleField } from "./ParticleField";
 
-type Formation = "ring" | "grid" | "arrow" | "wave";
+type Formation = "drone" | "ring" | "grid" | "arrow" | "wave";
 
-const ORDER: Formation[] = ["ring", "grid", "arrow", "wave"];
+const ORDER: Formation[] = ["drone", "ring", "grid", "arrow", "wave"];
 const CHIPS: { key: Formation; label: string }[] = [
+  { key: "drone", label: "Drone" },
   { key: "ring", label: "Ring" },
   { key: "grid", label: "Grid" },
   { key: "arrow", label: "Arrow" },
@@ -52,15 +54,21 @@ function pos(i: number, f: Formation): [number, number] {
 const cornerBase: React.CSSProperties = { position: "absolute", width: 22, height: 22 };
 
 export function HeroFormation() {
-  const [formation, setFormation] = useState<Formation>("ring");
+  const [formation, setFormation] = useState<Formation>("drone");
+  // "warming": three.js is mounting behind the dots (opacity 0) so the
+  // canvas can produce its first frame before the dots are removed — this
+  // guarantees the panel is never blank while three.js loads.
+  const [mode, setMode] = useState<"particles" | "warming" | "dots">("dots");
   const [alt, setAlt] = useState("ALT 118 m");
   const [acc, setAcc] = useState("ACC 98.4%");
   const userPicked = useRef(false);
+  const htmlFormation = formation === "drone" ? "ring" : formation;
 
   // Auto-cycle formations until the visitor picks one.
   useEffect(() => {
     const reduce =
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce) setMode("warming");
     if (reduce) return;
     const id = setInterval(() => {
       if (userPicked.current) return;
@@ -103,31 +111,49 @@ export function HeroFormation() {
         <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#070708", overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(240px 180px at 50% 48%, rgba(232,72,8,.16), transparent 70%)" }} />
           <div className="rx-radar" style={{ position: "absolute", left: "-50%", top: "-50%", width: "200%", height: "200%", background: "conic-gradient(from 0deg, rgba(232,72,8,.24), rgba(232,72,8,0) 40%)", transformOrigin: "50% 50%", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", inset: 0 }}>
-            {Array.from({ length: N }, (_, i) => {
-              const [left, top] = pos(i, formation);
-              return (
-                <span
-                  key={i}
-                  className="rx-tw"
-                  style={{
-                    position: "absolute",
-                    left: `${left}%`,
-                    top: `${top}%`,
-                    width: 6,
-                    height: 6,
-                    marginLeft: -3,
-                    marginTop: -3,
-                    borderRadius: "50%",
-                    background: "var(--rx-orange-400)",
-                    boxShadow: "0 0 7px rgba(251,106,46,.9)",
-                    transition: "left .9s cubic-bezier(.45,0,.2,1), top .9s cubic-bezier(.45,0,.2,1)",
-                    animationDelay: `${(i % 9) * 0.3}s`,
-                  }}
-                />
-              );
-            })}
-          </div>
+          {(mode === "particles" || mode === "warming") && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: mode === "particles" ? 1 : 0,
+                transition: "opacity .5s",
+              }}
+            >
+              <ParticleField
+                formation={formation}
+                onReady={() => setMode("particles")}
+                onFail={() => setMode("dots")}
+              />
+            </div>
+          )}
+          {(mode === "dots" || mode === "warming") && (
+            <div style={{ position: "absolute", inset: 0 }}>
+              {Array.from({ length: N }, (_, i) => {
+                const [left, top] = pos(i, htmlFormation);
+                return (
+                  <span
+                    key={i}
+                    className="rx-tw"
+                    style={{
+                      position: "absolute",
+                      left: `${left}%`,
+                      top: `${top}%`,
+                      width: 6,
+                      height: 6,
+                      marginLeft: -3,
+                      marginTop: -3,
+                      borderRadius: "50%",
+                      background: "var(--rx-orange-400)",
+                      boxShadow: "0 0 7px rgba(251,106,46,.9)",
+                      transition: "left .9s cubic-bezier(.45,0,.2,1), top .9s cubic-bezier(.45,0,.2,1)",
+                      animationDelay: `${(i % 9) * 0.3}s`,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
           <span className="rx-mono" style={{ position: "absolute", top: 12, left: 14, display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10.5, letterSpacing: "0.1em", color: "rgba(255,255,255,.8)" }}>
             <span className="rx-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rx-orange-400)" }} />
             FORMATION · {formation.toUpperCase()}
